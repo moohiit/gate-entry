@@ -1,0 +1,43 @@
+.main-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.success-message {
+    background-color: #018374;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+}
+
+.success-message h2 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.success-message p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.back-button {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #4CAF50; /* Change to bluish color */
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #005C8A; /* Change to a slightly darker shade for hover effect */
+}
