@@ -214,7 +214,7 @@
                   // Create connection
                   include '../database.php';
                   //select only all student number whose status is late
-                  $sql = "SELECT COUNT(*) as count FROM inqury_data WHERE date > CURDATE() - INTERVAL 1 MONTH AND date <= CURDATE() AND status='Late';";
+                  $sql = "SELECT COUNT(*) as count FROM inqury_data WHERE MONTH(date) = MONTH(CURDATE()) AND YEAR(date) = YEAR(CURDATE()) AND status='Late';";
                   $result = mysqli_query($conn, $sql);
                   $row = $result->fetch_assoc();
                   echo $row["count"];
@@ -228,7 +228,7 @@
                   // Create connection
                   include '../database.php';
                   //select only all student number whose status is late
-                  $sql = "SELECT COUNT(*) as count FROM inqury_data WHERE date > CURDATE() - INTERVAL 1 MONTH AND date <= CURDATE() AND status='Early';";
+                  $sql = "SELECT COUNT(*) as count FROM inqury_data WHERE MONTH(date) = MONTH(CURDATE()) AND YEAR(date) = YEAR(CURDATE()) AND status='Early';";
                   $result = mysqli_query($conn, $sql);
                   $row = $result->fetch_assoc();
                   echo $row["count"];
@@ -320,7 +320,7 @@
 
               // Create a pie chart
               var myPieChart = new Chart(ctx2, {
-                type: "polarArea",
+                type: "pie",
                 data: {
                   labels: ["Late Entry", "Early Exit"],
                   datasets: [{

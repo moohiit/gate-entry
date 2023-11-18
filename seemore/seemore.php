@@ -100,7 +100,6 @@
     <div class="main-content">
       <?php
       session_start();
-
       // Check if the user is an admin
       if ($_SESSION['role'] !== 'admin') {
         ?>
