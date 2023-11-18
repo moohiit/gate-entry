@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!----======== CSS ======== -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="../styles.css" />
   <link rel="stylesheet" href="dashboard.css">
   <!----===== Boxicons CSS ===== -->
   <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet" />
@@ -317,16 +317,14 @@
 
               // Get the canvas element
               var ctx2 = document.getElementById("myPieChart2").getContext("2d");
-
-              // Create a pie chart
-              var myPieChart = new Chart(ctx2, {
-                type: "pie",
+              // Create a bar chart
+              var myBarChart = new Chart(ctx2, {
+                type: "bar",
                 data: {
                   labels: ["Late Entry", "Early Exit"],
                   datasets: [{
                     data: [lateEntryCount2, earlyExitCount2],
-                    backgroundColor: ['#1b4965',
-                      '#cae9ff'],
+                    backgroundColor: ['#1b4965', '#cae9ff'],
                     // borderColor: ['black'],
                   }],
                 },
@@ -334,6 +332,7 @@
                   responsive: true,
                   maintainAspectRatio: false,
                   legend: {
+                    display: true, // Set to true to display the legend
                     position: "bottom",
                   },
                 },

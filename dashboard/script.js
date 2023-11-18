@@ -1,19 +1,29 @@
-
 // Add this code at the end of your existing script.js file
 const toggleBtn = document.querySelector(".sidebar header .toggle");
 const sidebar = document.querySelector(".sidebar");
+
+const addCloseClassOnce = () => {
+  sidebar.classList.add("close");
+  toggleBtn.removeEventListener("click", addCloseClassOnce);
+};
 
 toggleBtn.addEventListener("click", () => {
   sidebar.classList.toggle("close");
 });
 
-// Add this script in your existing script.js file or create a new one
-$(document).ready(function () {
-  $(".bx-menu-alt-left").click(function () {
-    $(".mobile-sidebar").toggleClass("open");
-  });
+// Check if the initial screen width is less than or equal to a certain breakpoint (e.g., 768 pixels)
+if (window.innerWidth <= 768) {
+  addCloseClassOnce();
+}
 
-  $(".close-icon").click(function () {
-    $(".mobile-sidebar").removeClass("open");
-  });
+// Add a resize event listener to handle changes in screen width
+window.addEventListener("resize", () => {
+  // Check if the current screen width is less than or equal to the breakpoint
+  if (window.innerWidth <= 768) {
+    // Add the "close" class only once
+    addCloseClassOnce();
+  } else {
+    // Remove the "close" class when the screen size is larger than the breakpoint
+    sidebar.classList.remove("close");
+  }
 });

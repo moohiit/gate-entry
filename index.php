@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>KCMT GATE LOGIN</title>
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./index.css">
 
 </head>
 

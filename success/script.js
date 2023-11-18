@@ -1,29 +1,29 @@
-const body = document.querySelector('body'),
-      sidebar = body.querySelector('nav'),
-      toggle = body.querySelector(".toggle"),
-      searchBtn = body.querySelector(".search-box"),
-      modeSwitch = body.querySelector(".toggle-switch"),
-    modeText = body.querySelector(".mode-text"),
-      heading = body.querySelector("#heading");
+// Add this code at the end of your existing script.js file
+const toggleBtn = document.querySelector(".sidebar header .toggle");
+const sidebar = document.querySelector(".sidebar");
 
+const addCloseClassOnce = () => {
+  sidebar.classList.add("close");
+  toggleBtn.removeEventListener("click", addCloseClassOnce);
+};
 
-toggle.addEventListener("click" , () =>{
-    sidebar.classList.toggle("close");
-    // heading.classList.toggle("hidden");
-})
+toggleBtn.addEventListener("click", () => {
+  sidebar.classList.toggle("close");
+});
 
-searchBtn.addEventListener("click" , () =>{
+// Check if the initial screen width is less than or equal to a certain breakpoint (e.g., 768 pixels)
+if (window.innerWidth <= 768) {
+  addCloseClassOnce();
+}
+
+// Add a resize event listener to handle changes in screen width
+window.addEventListener("resize", () => {
+  // Check if the current screen width is less than or equal to the breakpoint
+  if (window.innerWidth <= 768) {
+    // Add the "close" class only once
+    addCloseClassOnce();
+  } else {
+    // Remove the "close" class when the screen size is larger than the breakpoint
     sidebar.classList.remove("close");
-    // heading.classList.toggle("hidden");
-})
-
-modeSwitch.addEventListener("click" , () =>{
-    body.classList.toggle("dark");
-    
-    if(body.classList.contains("dark")){
-        modeText.innerText = "Light mode";
-    }else{
-        modeText.innerText = "Dark mode";
-        
-    }
+  }
 });

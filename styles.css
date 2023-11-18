@@ -378,3 +378,19 @@ color: #707070;
     height: 40px;
     width: calc(100% - 88px);
 }
+
+
+/* Mobile Styles */
+@media only screen and (max-width: 768px) {
+  .navbar h1 {
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: 1.0rem;
+  }
+
+  .footer p{
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding-inline: 10px;
+  }
+}
