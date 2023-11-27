@@ -60,5 +60,11 @@ input, textarea, select {
     background-color: darkblue;
     color: #f7f7f7;
 }
-/* Style the form as per your requirements */
 
+
+.nav-links .nav-link a[href*="../addStudent/addStudent.php"] {
+  border: white 2px solid;
+  border-radius: 5px;
+}
+
+/* Style the form as per your requirements */

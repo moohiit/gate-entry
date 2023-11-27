@@ -12,7 +12,7 @@
   <div class="full-body">
     <div class="wrapper">
       <div class="title-text">
-        <div class="title login">GATE LOGIN</div>
+        <div class="title login">GATE ENTRY SYSTEM</div>
       </div>
       <!-- Add this code inside the <body> tag -->
       <?php
@@ -40,7 +40,6 @@
       </div>
     </div>
   </div>
-  <script src="./script.js"></script>
+  <script src="./index.js"></script>
 </body>
-
 </html>

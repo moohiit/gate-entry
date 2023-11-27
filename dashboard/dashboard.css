@@ -1,4 +1,4 @@
-.dashboard{
+.dashboard-container{
   background-color: aliceblue;
   height: min-content;
   border-radius: 5px;
@@ -19,6 +19,7 @@
 .main-content>h1 p{
   font-size: 0.8rem;
   font-weight: 300;
+  margin: 2px;
 }
 .main-content .heading h1{
   margin: 15px;
@@ -30,6 +31,11 @@
 
 .tab-content{
   width: 100%;
+}
+
+.tab-content h1{
+  font-size: 1.5rem;
+  color: #0C356A;
 }
 
 .tab{
@@ -50,19 +56,28 @@
   background-color: #ecf3f3;
 }
 
-.menu-links .nav-link a[href*="../dashboard/dashboard.php"]{
+.nav-links .nav-link a[href*="../dashboard/dashboard.php"]{
   border: white 2px solid;
   border-radius: 5px;
 }
 
 .content{
   display: flex;
-  justify-content: space-between;
-  background-color: #ecf3f3;
+  flex-direction: column;
+  background-color: #ecf3d3;
   padding: 5px;
   margin-block: 5px;
 }
 
+.content-row{
+  display: flex;
+  justify-content: space-between;
+}
+
+.content-row p {
+    margin-top: 0;
+    margin-bottom: 0.1rem;
+}
 .access-denied{
   width: 100%;
   height: calc(100vh - 80px);

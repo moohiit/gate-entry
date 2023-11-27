@@ -2,10 +2,12 @@
 ob_start();
 session_start();
 include '../database.php';
+if (isset($_GET['id'])) {
+  $id = $_GET['id'];
+}
 ?>
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="UTF-8">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -96,18 +98,12 @@ include '../database.php';
     <div class="home-content">
       <!-- Main Content Goes Here   -->
       <div class="main-content">
-        <?php
-        if (isset($_GET['id'])) {
-          $id = $_GET['id'];
-        }
-        ?>
-
         <div class="form-container">
           <?php
           $sql = "SELECT * from student where id='{$id}'";
           $result = mysqli_query($conn, $sql);
           while ($row = mysqli_fetch_assoc($result)) {
-            $student_id  = $row['id'];
+            $student_id = $row['id'];
             $photo = $row['photo_url'];
             ?>
             <form class="form" method="post">
@@ -125,28 +121,33 @@ include '../database.php';
                 <input type="text" name="year" value="<?php echo strtoupper($row['year']); ?>" readonly>
               </div>
               <div class="form-row">
-                <label for="num">Mobile No:</label>
+                <label for="num">Number:</label>
                 <input type="text" name="num" value="<?php echo $row['conumber']; ?>" readonly>
               </div>
               <div class="form-row">
-                <label for="status">Status:</label>
-                <select name="status" id="issue">
+                <label for="issue">Issue:</label>
+                <select name="issue" id="issue">
                   <option value="Late">Late Entry</option>
                   <option value="Early">Early Exit</option>
+                  <option value="Tie">Tie</option>
+                  <option value="Belt">Belt</option>
+                  <option value="Shoes">Shoes</option>
+                  <option value="ID">ID</option>
+                  <option value="ID">Need a Haircut</option>
+                  <option value="ID">Need a Shave</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label for="author">Authorised By:</label>
+                <select name="author" id="author" required>
+                  <option value="Proctor" selected>Proctor Sir</option>
+                  <option value="HOD">HOD Sir</option>
+                  <option value="D.G. Sir">D.G. Sir</option>
                 </select>
               </div>
               <div class="form-row">
                 <label for="reason">Reason:</label>
-                <textarea name="reason"></textarea>
-              </div>
-              <div class="form-row">
-                <label for="author">Authorised By:</label>
-                <select name="author" id="author">
-                  <option value="Gate Incharge">Gate Incharge</option>
-                  <option value="Proctor">Proctor Sir</option>
-                  <option value="HOD">HOD Sir</option>
-                  <option value="D.G. Sir">D.G. Sir</option>
-                </select>
+                <textarea name="reason" placeholder="Fill Reason" required></textarea>
               </div>
               <div class="form-row">
                 <input type="submit" class="btn" name="btn">
@@ -158,13 +159,14 @@ include '../database.php';
           if (isset($_POST["btn"])) {
             $name = $_POST['name'];
             $dept = $_POST['dprt'];
-            $year = $_POST['year'];
+            $year= $_POST['year'];
             $num = $_POST['num'];
-            $status = $_POST['status'];
             $reason = $_POST['reason'];
+            $issue = $_POST['issue'];
             $author = $_POST['author'];
+
             //Inserting the data into database
-            $sql = "INSERT INTO inqury_data(student_id,name,dprt,year,contact,reason,authorisedBy,status,photo_url) values('{$student_id}','{$name}','{$dept}','{$year}','{$num}','{$reason}','{$author}','{$status}','{$photo}')";
+            $sql = "INSERT INTO inqury_data(student_id,name,dprt,year,contact,reason,authorisedBy,status,photo_url) values('{$student_id}','{$name}','{$dept}','{$year}','{$num}','{$reason}','{$author}','{$issue}','{$photo}')";
             $result = mysqli_query($conn, $sql);
             header('Location: ../success/success.php');
             ob_end_flush();

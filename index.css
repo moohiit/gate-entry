@@ -16,27 +16,35 @@ html,body{
   background-size: cover;
 }
 
-.full-body{
+.full-body {
   display: grid;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   place-items: center;
-  background-image: url("./Home.jpg");
+  background-image: url(./gate1.png);
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: inherit;
+  background-position: center;
+  /* Add the blur effect */
+  /* filter: blur(8px);
+  -webkit-filter: blur(8px); */
 }
+
 ::selection{
   background: #1a75ff;
   color: #fff;
 }
-.wrapper{
-  margin-top: 40px;
-  overflow: hidden;
-  max-width: 390px;
-  background: #fff;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
+.wrapper {
+    margin-top: 40px;
+    position: absolute;
+    top: 20%;
+    overflow: hidden;
+    min-width: 40%;
+    min-height: 300px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
 }
 .wrapper .title-text{
   display: flex;
@@ -46,8 +54,9 @@ html,body{
   color: #fff;
 }
 .wrapper .title{
-  font-size: 25px;
+  font-size: 30px;
   font-weight: 400;
+  padding: 10px;
   text-align: center;
   transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
 }

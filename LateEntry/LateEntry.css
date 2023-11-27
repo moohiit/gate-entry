@@ -1,3 +1,7 @@
+body{
+  min-width: fit-content;
+}
+
 .main-content .heading h1 {
   margin: 15px;
   color: #607070;
@@ -124,7 +128,7 @@ input[type="button"] {
   line-height: 1.5;
 }
 
-.menu-links .nav-link a[href*="../LateEntry/LateEntry.php"] {
+.nav-links .nav-link a[href*="../LateEntry/LateEntry.php"] {
   border: white 2px solid;
   border-radius: 5px;
 }
@@ -147,17 +151,33 @@ td {
 }
 
 th {
-  background-color: #f2f2f2; /* Background color for header cells */
+  background-color: #343f71;
+  color: #fff;
+}
+.table td, .table th {
+    padding: 0.3rem;
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6;
+}
+tr:nth-child(even) {
+  background-color: #f7f7f7;
+}
+tr:nth-child(odd) {
+  background-color:#4858a03d;
 }
 
-.table-image{
+.image-column {
+  width: 102px;
+  height: 102px;
+}
+.table-image {
   width: 100px;
   height: 100px;
+  border-radius: 5px;
   padding: 2px;
-  margin: 2px;
 }
 
-.access-denied{
+.access-denied {
   width: 100%;
   height: calc(100vh - 80px);
   display: flex;

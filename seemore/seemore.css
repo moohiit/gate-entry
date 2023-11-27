@@ -1,4 +1,8 @@
-.dashboard {
+body{
+  min-width: fit-content;
+}
+
+.dashboard-container {
   height: min-content;
   background-color: aliceblue;
   border-radius: 5px;
@@ -36,7 +40,19 @@ td {
 }
 
 th {
-  background-color: #f2f2f2; /* Background color for header cells */
+  background-color: #343f71;
+  color: #fff;
+}
+.table td, .table th {
+    padding: 0.3rem;
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6;
+}
+tr:nth-child(even) {
+  background-color: #f7f7f7;
+}
+tr:nth-child(odd) {
+  background-color:#4858a03d;
 }
 
 .table-image{

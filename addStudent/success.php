@@ -9,7 +9,7 @@
   <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" type="text/css"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="EarlyExit.css">
+  <link rel="stylesheet" href="success.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gate Entry System</title>
   <link rel="stylesheet" href="../styles.css">
@@ -72,7 +72,7 @@
       </li>
 
       <li class="log_out nav-link">
-        <a href="../logout.php">
+        <a href="logout.php">
           <i class='bx bx-log-out bx-fade-left-hover'></i>
           <span class="links_name">Log out</span>
         </a>
@@ -91,86 +91,20 @@
     <div class="home-content">
       <!-- Main Content Goes Here   -->
       <div class="main-content">
-        <?php
-        session_start();
-
-        // Check if the user is an admin
-        if ($_SESSION['role'] !== 'admin') {
-          ?>
-          <div class=access-denied>
+        <div class="success-message">
+          <h2>
             <?php
-            echo "<div>You do not have permission to access this page.</div>";
-            // You may also redirect to a limited access page or the login page.
+            if (isset($_SESSION['success'])) {
+              echo $_SESSION['success'];
+              unset($_SESSION['success']);
+            } else {
+              echo 'Student Added Successfully';
+            }
             ?>
-            <div>
-              <a style="text-decoration: none;" href="../Search/search.php">Go to Homepage</a>
-            </div>
-          </div>
-          <?php
-        }else{
-        ?>
-        <div class="heading">
-          <h1>Today's Early Exit Report</h1>
+          </h2>
+          <a href="./addStudent.php" class="back-button">Add More</a>
+          <a href="../dashboard/dashboard.php" class="back-button">Go to Home</a>
         </div>
-        <div class="table">
-          <table>
-            <thead>
-              <tr>
-                <th>Sr.No</th>
-                <th>Name</th>
-                <th>Department</th>
-                <th>Contact No.</th>
-                <th>Reason</th>
-                <th>Authorised By</th>
-                <th>Time</th>
-                <th>Date</th>
-                <th>Photo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              include '../database.php';
-              $sql = "SELECT * from inqury_data where status='Early' and date=CURRENT_DATE";
-              $result = mysqli_query($conn, $sql);
-              $i = 1;
-              while ($row = mysqli_fetch_assoc($result)) {
-                ?>
-                <tr>
-                  <td>
-                    <?php echo $i ?>
-                  </td>
-                  <td>
-                    <?php echo $row["name"]; ?>
-                  </td>
-                  <td>
-                    <?php echo $row["dprt"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["contact"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["reason"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["authorisedBy"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["currentime"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["date"] ?>
-                  </td>
-                  <td class="image-column">
-                    <img class="table-image" src="<?php echo $row["photo_url"] ?>" alt="Photo">
-                  </td>
-                </tr>
-                <?php
-                $i++;
-              } ?>
-            </tbody>
-          </table>
-        </div>
-        <?php } ?>
       </div>
       <!-- Main Content Ends Here -->
     </div>

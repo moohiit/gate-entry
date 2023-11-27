@@ -1,69 +1,110 @@
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
 
+section.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
 .form-container {
   margin: 15px;
   padding-top: 20px;
-  color: #607070;
+  padding-bottom: 20px;
+  color: #333;
   font-size: 1rem;
   font-weight: 400;
   text-align: center;
   background-color: #fff;
-  height: calc(100vh - 120px);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Add this CSS to your existing CSS file or in a separate style.css file */
-
 .form {
-  margin-top: 50px;
+  margin-top: 30px;
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
   background-color: #f7f7f7;
   text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .form-row {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+  flex-direction: column;
+  margin-bottom: 20px;
 }
 
-
-input[type="submit"]{
-  width: 150px;
-  height: 75px;
-  display: block;
-  margin: 0 auto;
-  padding: 10px 20px;
-  background-color: #695cfe;
+input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
-  font-size: larger;
+  font-size: 16px;
 }
 
-/* Style the form as per your requirements */
-
-
-.menu-links .nav-link a[href*="../mail/mail.php"] {
-  border: white 2px solid;
-  border-radius: 5px;
+#statusMessages {
+  margin-top: 20px;
 }
 
-.access-denied{
-  width: 100%;
-  height: calc(100vh - 120px);
+.alert {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.alert p {
+  margin: 0;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+}
+
+.access-denied {
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  color: #721c24;
+}
+
+.access-denied {
+    width: 100%;
+    height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.access-denied a:hover {
+  text-decoration: underline;
+}
+
+.nav-links .nav-link a[href*="../mail/mail.php"] {
+  border: white 2px solid;
+  border-radius: 5px;
 }

@@ -23,7 +23,7 @@
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f7f7f7;
+  background-color:lightgray;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -59,7 +59,7 @@
   border-radius: 5px;
 }
 
-.input {
+.input{
   flex: 2;
   padding: 10px;
   width: 100%;
@@ -72,12 +72,17 @@ input[type="button"] {
   display: block;
   margin: 0 auto;
   padding: 10px 20px;
-  background-color: #695cfe;
+  background-color: #0C356A;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
+}
+
+input[type="submit"]:hover,
+input[type="button"]:hover{
+  background-color: #071952;
 }
 
 /* Style the form as per your requirements */
@@ -95,6 +100,7 @@ input[type="button"] {
 
 .card-container .card {
   display: flex;
+  flex-direction: row;
   align-items: center;
   width: 250px;
   height: 120px;
@@ -116,6 +122,8 @@ input[type="button"] {
 .card-container .image {
   width: 100px;
   height: 100px;
+  margin-left: 5px;
+  border-radius: 5px;
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -141,7 +149,7 @@ input[type="button"] {
   line-height: 1.5;
 }
 
-.menu-links .nav-link a[href*="../Search/search.php"] {
+.nav-links .nav-link a[href*="../Search/search.php"] {
   border: white 2px solid;
   border-radius: 5px;
 }

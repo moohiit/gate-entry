@@ -16,10 +16,7 @@ $smtp_username = "ramangoyal87021@gmail.com";
 $smtp_password = "lwscczvcprtjdaqe";
 
 // Database connection details
-$host = "localhost";
-$dbname = "gate";
-$username = "root";
-$password = "";
+include '../database.php';
 
 // Check if the form is submitted
 if (isset($_POST['send_mail'])) {
@@ -44,13 +41,17 @@ if (isset($_POST['send_mail'])) {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
 
     // Fetch department-wise email addresses
-    $deptQuery = $pdo->query("SELECT * FROM department");
+    $deptQuery = $pdo->query("SELECT dprt FROM inqury_data WHERE date=CURRENT_DATE");
     $departments = $deptQuery->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($departments as $department) {
       // Fetch data for each department
-      $dept = $department['department'];
-      $deptEmail = $department['deptEmail'];
+      $dept = $department['dprt'];
+      $sql =$pdo->prepare("SELECT deptEmail FROM department WHERE department = :dept;");
+      $sql->bindParam(':dept', $dept);
+      $sql->execute();
+      $row = $sql->fetchAll(PDO::FETCH_ASSOC);
+      $deptEmail = $row[0]["deptEmail"];
 
       $stmt = $pdo->prepare("SELECT * FROM inqury_data WHERE dprt = :dept AND date = CURRENT_DATE");
       $stmt->bindParam(':dept', $dept);
@@ -59,9 +60,9 @@ if (isset($_POST['send_mail'])) {
 
       // Build HTML content dynamically for each department
       $html_content = '<html><head><title>Student Report</title></head><body>';
-      $html_content .= '<h2>Student Report for ' . $dept . '</h2>';
+      $html_content .= `<h2>Today's Students Report for ` . $dept . '</h2>';
       $html_content .= '<table border="1">';
-      $html_content .= '<tr><th>Name</th><th>Department</th><th>Contact</th><th>Reason</th><th>Status</th><th>Time</th><th>Date</th><th>Photo</th></tr>';
+      $html_content .= '<tr><th>Name</th><th>Department</th><th>Contact</th><th>Reason</th><th>Status</th><th>Authorized By</th><th>Time</th><th>Date</th><th>Photo</th></tr>';
 
       foreach ($data as $row) {
         $html_content .= '<tr>';
@@ -70,9 +71,10 @@ if (isset($_POST['send_mail'])) {
         $html_content .= '<td>' . $row['contact'] . '</td>';
         $html_content .= '<td>' . $row['reason'] . '</td>';
         $html_content .= '<td>' . $row['status'] . '</td>';
+        $html_content .= '<td>' . $row['authorisedBy'] . '</td>';
         $html_content .= '<td>' . $row['currentime'] . '</td>';
         $html_content .= '<td>' . $row['date'] . '</td>';
-        $html_content .= '<td><img width="100" height="100" src="https://avatars.githubusercontent.com/u/109367447?v=4" alt="Photo"></td>';
+        $html_content .= '<td><img width="100" height="100" src="'.$row["photo_url"].'" alt="Photo"></td>';
         $html_content .= '</tr>';
       }
 

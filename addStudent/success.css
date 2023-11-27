@@ -7,8 +7,6 @@
 }
 
 .success-message {
-    position: absolute;
-    top: 20%;
     background-color: #018374;
     color: #fff;
     text-align: center;
@@ -42,6 +40,4 @@
 
 .back-button:hover {
     background-color: #005C8A; /* Change to a slightly darker shade for hover effect */
-    color: #f0f0f0;
-    text-decoration: none;
 }

@@ -1,396 +1,275 @@
-/* Google Font Import - Poppins */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+/* Googlefont Poppins CDN Link */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+/* style1.css */
+/* Define a color variable */
+:root {
+  --button-color: #3498db; /* Replace with your desired color code */
+  --supernova: #fbc40e;
+  --main-color: #f34c19;
+  --text-color: #e9d8e4;
+  --template-color: #343f71;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
-:root{
-    /* ===== Colors ===== */
-    --body-color: #ffffff;
-    --sidebar-color: #FFF;
-    --primary-color: #695CFE;
-    --primary-color-light: #F6F5FF;
-    --toggle-color: #DDD;
-    --text-color: #ffffff;
+/* Create color variables */
 
-    /* ====== Transition ====== */
-    --tran-03: all 0.2s ease;
-    --tran-03: all 0.3s ease;
-    --tran-04: all 0.3s ease;
-    --tran-05: all 0.3s ease;
+.sidebar {
+  position: fixed;
+  height: 100%;
+  width: 240px;
+  /* background: #AA0000; */
+  background: #0C356A;
+  /* Light red background color */
+  transition: all 0.5s ease;
 }
 
-body{
-    min-height: 100vh;
-    background-color: var(--body-color);
-    transition: var(--tran-05);
+.sidebar.active {
+  width: 60px;
 }
 
-::selection{
-    background-color: var(--primary-color);
-    color: #fff;
+.sidebar .logo-details {
+  height: 80px;
+  display: flex;
+  align-items: center;
 }
 
-body.dark{
-    --body-color: #18191a;
-    --sidebar-color: #242526;
-    --primary-color: #3a3b3c;
-    --primary-color-light: #3a3b3c;
-    --toggle-color: #fff;
-    --text-color: #ccc;
+.sidebar .logo-details i {
+  font-size: 28px;
+  font-weight: 500;
+  color: #fff;
+  min-width: 60px;
+  text-align: center;
 }
 
-/* ===== Sidebar ===== */
- .sidebar{
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 250px;
-    padding: 10px 14px;
-    /* background: var(--sidebar-color); */
-    background-color: #AA0000;
-    color: white;
-    transition: var(--tran-05);
-    z-index: 100;  
+.sidebar .logo-details h5 {
+  color: #fff;
+  text-align: left;
+  margin-left: 5px;
 }
-.sidebar.close{
-    width: 88px;
+.sidebar .logo-details .logo_name {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 500;
 }
-
-/* ===== Reusable code - Here ===== */
-.sidebar li{
-    height: 50px;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
+.sidebar .logo-details .logo_name img {
+  width: 55px;
+  height: 55px;
+  border-radius: 5px;
+  margin-left: 2px;
+}
+.sidebar .nav-links {
+  margin-top: 10px;
 }
 
-.sidebar header .image,
-.sidebar .icon{
-    min-width: 60px;
-    border-radius: 6px;    
+.sidebar .nav-links li {
+  position: relative;
+  list-style: none;
+  height: 50px;
 }
 
-.sidebar .icon{
-    min-width: 60px;
-    border-radius: 6px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
+.sidebar .nav-links li a {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  border-radius: 5px;
+  align-items: center;
+  text-decoration: none;
+  transition: all 0.4s ease;
 }
 
-.sidebar .text,
-.sidebar .icon{
-    color: var(--text-color);
-    transition: var(--tran-03);
+.sidebar .nav-links li a.active {
+  background: #aa0000;
+  /* Darker shade of red for active */
+  color: #fff;
 }
 
-.sidebar .text{
-    font-size: 17px;
-    font-weight: 500;
-    white-space: nowrap;
-    opacity: 1;
+.sidebar .nav-links li a .text {
+  color: #f5f5f5;
 }
-.sidebar.close .text{
-    opacity: 0;
-}
-/* =========================== */
-
-.sidebar header{
-    position: relative;
+.sidebar .nav-links li a:hover {
+  background: #071952;
+  /* Darker shade of red on hover */
+  color: #fff;
 }
 
-.sidebar header .image-text{
-    display: flex;
-    align-items: center;
-}
-.sidebar header .logo-text{
-    display: flex;
-    flex-direction: column;
-}
-header .image-text .name {
-    margin-top: 2px;
-    font-size: 18px;
-    font-weight: 600;
+.sidebar .nav-links li i {
+  min-width: 30px;
+  text-align: center;
+  font-size: 18px;
+  color: #fff;
+  margin-right: 17px;
 }
 
-header .image-text .profession{
-    font-size: 16px;
-    margin-top: -2px;
-    display: block;
+.sidebar .nav-links li a .links_name {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 400;
+  white-space: nowrap;
 }
 
-.sidebar header .image{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.sidebar header .image img{
-    width: 40px;
-    border-radius: 6px;
-}
-
-.sidebar header .toggle{
-    position: absolute;
-    top: 50%;
-    right: -25px;
-    transform: translateY(-50%) rotate(180deg);
-    height: 25px;
-    width: 25px;
-    background-color: var(--primary-color);
-    color: var(--sidebar-color);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    cursor: pointer;
-    transition: var(--tran-05);
-}
-
-body.dark .sidebar header .toggle{
-    color: var(--text-color);
-}
-
-.sidebar.close .toggle{
-    transform: translateY(-50%) rotate(0deg);
-}
-
-.sidebar .menu{
-    margin-top: 40px;
-}
-
-.sidebar li.search-box{
-    border-radius: 6px;
-    background-color: var(--primary-color-light);
-    
-    cursor: pointer;
-    transition: var(--tran-05);
-}
-
-.sidebar li.search-box input{
-    height: 100%;
-    width: 100%;
-    outline: none;
-    border: none;
-    background-color: var(--primary-color-light);
-    color: var(--text-color);
-    border-radius: 6px;
-    font-size: 17px;
-    font-weight: 500;
-    transition: var(--tran-05);
-}
-.sidebar li a{
-    list-style: none;
-    height: 100%;
-    background-color: transparent;
-    display: flex;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    border-radius: 6px;
-    text-decoration: none;
-    transition: var(--tran-03);
-}
-
-.sidebar li a:hover{
-    background-color: var(--primary-color);
-}
-.sidebar li a:hover .icon,
-.sidebar li a:hover .text{
-    color: var(--sidebar-color);
-}
-body.dark .sidebar li a:hover .icon,
-body.dark .sidebar li a:hover .text{
-    color: var(--text-color);
-}
-
-.sidebar .menu-bar{
-    height: calc(100% - 55px);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow-y: scroll;
-}
-.menu-bar::-webkit-scrollbar{
-    display: none;
-}
-.sidebar .menu-bar .mode{
-    border-radius: 6px;
-    background-color: var(--primary-color-light);
-    position: relative;
-    transition: var(--tran-05);
-}
-
-.menu-bar .mode .sun-moon{
-    height: 50px;
-    width: 60px;
-}
-
-.mode .sun-moon i{
-    position: absolute;
-}
-.mode .sun-moon i.sun{
-    opacity: 0;
-}
-body.dark .mode .sun-moon i.sun{
-    opacity: 1;
-}
-body.dark .mode .sun-moon i.moon{
-    opacity: 0;
-}
-
-.menu-bar .bottom-content .toggle-switch{
-    position: absolute;
-    right: 0;
-    height: 100%;
-    min-width: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    cursor: pointer;
-}
-.toggle-switch .switch{
-    position: relative;
-    height: 22px;
-    width: 40px;
-    border-radius: 25px;
-    background-color: var(--toggle-color);
-    transition: var(--tran-05);
-}
-
-.switch::before{
-    content: '';
-    position: absolute;
-    height: 15px;
-    width: 15px;
-    border-radius: 50%;
-    top: 50%;
-    left: 5px;
-    transform: translateY(-50%);
-    background-color: var(--sidebar-color);
-    transition: var(--tran-04);
-}
-
-body.dark .switch::before{
-    left: 20px;
-}
-
-.home .text{
-    font-size: 30px;
-    font-weight: 500;
-    color: var(--text-color);
-    padding: 12px 60px;
-}
-
-.sidebar.close ~ .home{
-    left: 88px;
-    /* height: calc(100% - 80px); */
-    width: calc(100% - 88px);
-}
-
-body.dark .home .text{
-    color: var(--text-color);
-}
-
-.search-box .bx-search{
-color: #707070;
-}
-
-.sidebar.close ~ .navbar{
-    left: 88px;
-    height:80px;
-    width: calc(100% - 88px);
-}
-.navbar{
-    position: absolute;
-    top: 0;
-    left: 250px;
-    height: 80px;
-    width: calc(100% - 250px);
-    background-color:#AA0000;
-    color: #F6F5FF;
-    transition: var(--tran-05);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.navbar h1{
-  font-weight: 900;
-  letter-spacing:1px;
-  font-size: 1.8rem;
-}
-
-
-.hidden{
-    visibility: hidden;
-}
-
-.home {
+.sidebar .nav-links .log_out {
   position: absolute;
-  top: 80px;
-  left: 250px;
-  width: calc(100% - 250px);
-  background-color: var(--body-color);
-  transition: var(--tran-05);
+  bottom: 0;
+  width: 100%;
+}
+
+.nav-link {
+  display: block;
+  padding: 0.5rem 0.8rem;
+}
+
+.home-section {
+  position: relative;
+  background: #f5f5f5;
+  min-height: 100vh;
+  width: calc(100% - 240px);
+  left: 240px;
+  transition: all 0.5s ease;
+}
+
+.sidebar.active ~ .home-section {
+  width: calc(100% - 60px);
+  left: 60px;
+}
+
+.home-section nav {
+  display: flex;
+  justify-content: space-between;
+  height: 70px;
+  /* background: #AA0000; */
+  background: #0C356A;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  width: calc(100% - 240px);
+  left: 240px;
+  z-index: 100;
+  padding: 0 5px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  transition: all 0.5s ease;
+}
+
+.sidebar.active ~ .home-section nav {
+  left: 60px;
+  width: calc(100% - 60px);
+}
+.sidebar.active ~ .home-section footer {
+  left: 60px;
+  width: calc(100% - 60px);
+}
+
+.home-section nav .sidebar-button {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 500;
+  color: #f5f5f5;
+}
+
+nav .sidebar-button i {
+  font-size: 35px;
+  margin-right: 10px;
+}
+
+.home-section .home-content {
+  position: relative;
+  padding-top: 70px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #aa0000;
+  color: #f5f5f5;
+}
+
+footer p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
+}
+
+.access-denied {
+  width: 100%;
+  height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Use flexbox to align content and footer */
+  justify-content: center;
+  align-items: center;
 }
 
-
-.main-content {
-  background-color: #f7fcfd;
-  width: 100%;
-  padding: 5px;
-  flex: 1; /* Allow the main-content to grow and take up available space */
-  overflow: auto; /* Add scrollbars when content exceeds the available space */
+.access-denied a:hover {
+  text-decoration: underline;
 }
 
-
-
-.footer {
-    position: fixed;
-    bottom: 0;
-    left: 250px;
-    height: 40px;
-    width: calc(100% - 250px);
-    background-color: #AA0000;
-    color: #F6F5FF;
-    transition: var(--tran-05);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.sidebar.close ~ .footer {
-    left: 88px;
-    height: 40px;
-    width: calc(100% - 88px);
-}
-
-
-/* Mobile Styles */
-@media only screen and (max-width: 768px) {
-  .navbar h1 {
-    font-weight: 700;
-    letter-spacing: 1px;
-    font-size: 1.0rem;
+/* Responsive Media Query */
+@media (max-width: 1240px) {
+  .sidebar {
+    width: 60px;
   }
 
-  .footer p{
-    font-size: 0.75rem;
-    font-weight: 500;
-    padding-inline: 10px;
+  .sidebar.active {
+    width: 220px;
+  }
+
+  .home-section {
+    width: calc(100% - 60px);
+    left: 60px;
+  }
+
+  .sidebar.active ~ .home-section {
+    overflow: hidden;
+    left: 220px;
+  }
+
+  .home-section nav {
+    width: calc(100% - 60px);
+    left: 60px;
+  }
+
+  .sidebar.active ~ .home-section nav {
+    width: calc(100% - 220px);
+    left: 220px;
+  }
+}
+
+@media (max-width: 756px) {
+  .sidebar {
+    width: 0;
+  }
+
+  .sidebar.active {
+    width: 60px;
+  }
+
+  .home-section {
+    width: 100%;
+    left: 0;
+  }
+
+  .sidebar.active ~ .home-section {
+    left: 60px;
+    width: calc(100% - 60px);
+  }
+
+  .home-section nav {
+    width: 100%;
+    left: 0;
+  }
+
+  .sidebar.active ~ .home-section nav {
+    left: 60px;
+    width: calc(100% - 60px);
   }
 }

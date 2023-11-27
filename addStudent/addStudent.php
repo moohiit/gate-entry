@@ -1,6 +1,6 @@
 <?php
-session_start();
 include '../database.php';
+session_start();
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,7 +13,7 @@ include '../database.php';
   <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" type="text/css"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="seemore.css">
+  <link rel="stylesheet" href="addStudent.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gate Entry System</title>
   <link rel="stylesheet" href="../styles.css">
@@ -96,92 +96,75 @@ include '../database.php';
       <!-- Main Content Goes Here   -->
       <div class="main-content">
         <?php
-        $department = null;
-        if (isset($_GET['id'])) {
-          $department = $_GET['id'];
-          $fromDate = $_SESSION["fromDate"] ?? null;
-          unset($_SESSION['fromDate']);
-          $toDate = $_SESSION["toDate"] ?? null;
-          unset($_SESSION['toDate']);
-        }
+        // Check if the user is an admin
+        if ($_SESSION['role'] !== 'admin') {
+          ?>
+          <div class=access-denied>
+            <?php
+            echo "<div>You do not have permission to access this page.</div>";
+            // You may also redirect to a limited access page or the login page.
+            ?>
+            <div>
+              <a style="text-decoration: none;" href="../Search/search.php">Go to Homepage</a>
+            </div>
+          </div>
+          <?php
+        }else{
         ?>
-        <div class="heading">
-          <h1>
-            <?php echo $department ?>
-          </h1>
-        </div>
-        <div class="table">
-          <table>
-            <thead>
-              <tr>
-                <!-- <th>Sr.No</th> -->
-                <th>Student ID</th>
-                <th>Name</th>
-                <th>Department</th>
-                <th>Year</th>
-                <th>Contact No.</th>
-                <th>Warnings</th>
-                <th>Photo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              // Use prepared statements to prevent SQL injection
-              if ($fromDate && $toDate) {
-                $sql1 = "SELECT student_id, name, dprt AS department, year, contact, COUNT(*) as warnings, photo_url FROM inqury_data WHERE `date` BETWEEN ? AND ? AND dprt=? GROUP BY student_id";
-                $stmt1 = $conn->prepare($sql1);
-                $stmt1->bind_param("sss", $fromDate, $toDate, $department);
-              } else if ($fromDate == null && $toDate == null) {
-                $sql1 = "SELECT student_id, name, dprt AS department, year, contact, COUNT(*) as warnings, photo_url FROM inqury_data WHERE DATE(`date`) = CURRENT_DATE AND dprt=? GROUP BY student_id";
-                $stmt1 = $conn->prepare($sql1);
-                $stmt1->bind_param("s", $department);
-              }
-
-              // Execute the query
-              $stmt1->execute();
-
-              // Get the result set
-              $result = $stmt1->get_result();
-              // $i = 1;
-              while ($row = mysqli_fetch_assoc($result)) {
+        <div class="form-container">
+          <form action="upload.php" class="form" method="post" enctype="multipart/form-data">
+            <h2 class="form-heading">Student Details</h2>
+            <center>
+              <h3 style="color: red;font-size: x-small;">
+                <?php if (isset($_SESSION['status'])) {
+                  echo $_SESSION['status'];
+                  unset($_SESSION['status']);
+                }
                 ?>
-                <tr>
-                  <!-- <td>
-                    <?php //echo $i ?>
-                  </td>-->
-                  <td> 
-                    <?php echo $row["student_id"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["name"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["department"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["year"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["contact"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["warnings"] >= 4 ? "100rs Fine" : $row["warnings"]; ?>
-                  </td>
-                  <td><img class="table-image" src="<?php echo $row["photo_url"] ?>" alt="Photo"></td>
-                </tr>
+              </h3>
+            </center>
+            <div class="form-row">
+              <label for="name">Name</label>
+              <input type="text" name="name">
+            </div>
+            <div class="form-row">
+              <label for="dprt">Department</label>
+              <select name="dprt">
+                <option value="select">Select Department</option>
                 <?php
-                // $i++;
-              }
-
-              // Close the statement
-              $stmt1->close();
-              // Close the connection
-              $conn->close();
-              ?>
-            </tbody>
-          </table>
+                $sql = "SELECT * from department";
+                $result = mysqli_query($conn, $sql);
+                while ($row = mysqli_fetch_assoc($result)) {
+                  ?>
+                  <option value="<?php echo $row["department"] ?>">
+                    <?php echo $row["department"] ?>
+                  </option>
+                  <?php
+                } ?>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="year">Year</label>
+              <select name="year" required>
+                <option value="First Year">First Year</option>
+                <option value="Second Year">Second Year</option>
+                <option value="Third Year">Third Year</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="mobile">Mobile No.</label>
+              <input type="text" name="mobile" required>
+            </div>
+            <div class="form-row">
+              <label for="">Photo:</label>
+              <input type="file" name="image" id="image" required>
+            </div>
+            <div class="form-row">
+              <input type="submit" value="submit" class="btn" name="submit">
+            </div>
+          </form>
         </div>
-
+        <?php } ?>
       </div>
       <!-- Main Content Ends Here -->
     </div>
