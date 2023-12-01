@@ -13,7 +13,7 @@ include '../database.php';
   <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" type="text/css"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="seemore.css">
+  <link rel="stylesheet" href="otherReason.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gate Entry System</title>
   <link rel="stylesheet" href="../styles.css">
@@ -86,108 +86,85 @@ include '../database.php';
     <nav>
       <div class="sidebar-button">
         <i class='bx bx-menu sidebarBtn'></i>
-        <span class="dashboard">Gate Entry System</span>
+        <span class="dashboard">Miscellaneous Report</span>
       </div>
     </nav>
     <!-- Navbar ends Here -->
     <div class="home-content">
       <!-- Main Content Goes Here   -->
       <div class="main-content">
-        <?php
-        $department = null;
-        if (isset($_GET['id'])) {
-          $department = $_GET['id'];
-          $fromDate = $_SESSION["fromDate"] ?? null;
-          unset($_SESSION['fromDate']);
-          $toDate = $_SESSION["toDate"] ?? null;
-          unset($_SESSION['toDate']);
-        }
-        ?>
-        <div class="heading">
-          <h1>
-            <?php echo $department ?>
-          </h1>
-        </div>
-        <div class="table">
-          <table>
-            <thead>
-              <tr>
-                <!-- <th>Sr.No</th> -->
-                <th>Student ID</th>
-                <th>Name</th>
-                <th>Department</th>
-                <th>Year</th>
-                <th>Contact No.</th>
-                <th>Warnings</th>
-                <th>Photo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              // Use prepared statements to prevent SQL injection
-              if ($fromDate && $toDate) {
-                $sql1 = "SELECT student_id, name, dprt AS department, year, contact, COUNT(*) as warnings, photo_url FROM inqury_data WHERE `date` BETWEEN ? AND ? AND dprt=? GROUP BY student_id";
-                $stmt1 = $conn->prepare($sql1);
-                $stmt1->bind_param("sss", $fromDate, $toDate, $department);
-              } else if ($fromDate == null && $toDate == null) {
-                $sql1 = "SELECT student_id, name, dprt AS department, year, contact, COUNT(*) as warnings, photo_url FROM inqury_data WHERE DATE(`date`) = CURRENT_DATE AND dprt=? GROUP BY student_id";
-                $stmt1 = $conn->prepare($sql1);
-                $stmt1->bind_param("s", $department);
-              }
-
-              // Execute the query
-              $stmt1->execute();
-
-              // Get the result set
-              $result = $stmt1->get_result();
-              // $i = 1;
-              while ($row = mysqli_fetch_assoc($result)) {
-                ?>
+      
+      <div class="heading">
+        <h1>Today's Miscellaneous Report</h1>
+      </div>
+      <div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Sr.No</th>
+              <th>Name</th>
+              <th>Department</th>
+              <th>Contact No.</th>
+              <th>Issue</th>
+              <th>Reason</th>
+              <th>Authorised BY</th>
+              <th>Time</th>
+              <th>Date</th>
+              <th>Photo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            $sql = "SELECT * from inqury_data where status NOT IN ('Late', 'Early') AND date=CURRENT_DATE";
+            $result = mysqli_query($conn, $sql);
+            $i = 1;
+            while ($row = mysqli_fetch_assoc($result)) {
+              ?>
                 <tr>
-                  <!-- <td>
-                    <?php //echo $i ?>
-                  </td>-->
-                  <td> 
-                    <?php echo $row["student_id"] ?>
+                  <td>
+                    <?php echo $i ?>
                   </td>
                   <td>
                     <?php echo $row["name"] ?>
                   </td>
                   <td>
-                    <?php echo $row["department"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["year"] ?>
+                    <?php echo $row["dprt"] ?>
                   </td>
                   <td>
                     <?php echo $row["contact"] ?>
                   </td>
                   <td>
-                    <?php echo $row["warnings"] >= 4 ? "100rs Fine" : $row["warnings"]; ?>
+                    <?php echo $row["status"] ?>
                   </td>
-                  <td><img class="table-image" src="<?php echo $row["photo_url"] ?>" alt="Photo"></td>
+                  <td>
+                    <?php echo $row["reason"] ?>
+                  </td>
+                  <td>
+                    <?php echo $row["authorisedBy"] ?>
+                  </td>
+                  <td>
+                    <?php echo $row["currentime"] ?>
+                  </td>
+                  <td>
+                    <?php echo $row["date"] ?>
+                  </td>
+                  <td class="image-column">
+                    <img class="table-image" src="<?php echo $row["photo_url"] ?>" alt="Photo">
+                  </td>
                 </tr>
                 <?php
-                // $i++;
-              }
-
-              // Close the statement
-              $stmt1->close();
-              // Close the connection
-              $conn->close();
-              ?>
-            </tbody>
-          </table>
-        </div>
-
+                $i++;
+            } ?>
+          </tbody>
+        </table>
       </div>
+    </div>
       <!-- Main Content Ends Here -->
     </div>
     <footer>
       <p>&copy; Gate Entry System <br> Developed by Mohit Patel and Raman Goyal</p>
     </footer>
   </section>
-  <script src="../scripts.js"></script>
+<script src="../scripts.js"></script>
 </body>
-
 </html>

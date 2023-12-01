@@ -1,5 +1,6 @@
 <?php
 session_start();
+include '../database.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -12,7 +13,7 @@ session_start();
   <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" type="text/css"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="search.css">
+  <link rel="stylesheet" href="success.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gate Entry System</title>
   <link rel="stylesheet" href="../styles.css">
@@ -85,83 +86,24 @@ session_start();
     <nav>
       <div class="sidebar-button">
         <i class='bx bx-menu sidebarBtn'></i>
-        <span class="dashboard">Search Student</span>
+        <span class="dashboard">Gate Entry System</span>
       </div>
     </nav>
     <!-- Navbar ends Here -->
     <div class="home-content">
       <!-- Main Content Goes Here   -->
       <div class="main-content">
-        <div class="form-container">
-          <form method="post" class="form">
-            <div class="form-row">
-              <label for="name" class="label">Student Name:</label>
-              <input type="text" id="name" name="name" class="input" placeholder="Search student" autocomplete="off">
-            </div>
-            <div class="form-row">
-              <input type="submit" value="Search" name="btn">
-            </div>
-          </form>
-        </div>
-        <?php
-        include '../database.php';
-        if (isset($_POST["btn"])) {
-          $n = $_POST['name'];
-          $sql = "select * from student where name like '%$n%'";
-          $result = mysqli_query($conn, $sql);
-          ?>
-          <div class="card-container">
-            <?php
-            while ($row = mysqli_fetch_assoc($result)) {
-              $id = $row["id"];
-              $name = $row["name"];
-              $department = $row["department"];
-              $conumber = $row["conumber"];
-              $photo_url = $row["photo_url"];
-
-              $userRole = $_SESSION['role'];
-              // Check if the user is a admin
-              if ($userRole === 'admin') {
-                $link = "../ReasonForm/proctorForm.php?id=$id";
-              } else {
-                $link = "../ReasonForm/reasonForm.php?id=$id";
-              }
-              ?>
-              <!-- Card Start here -->
-              <a class="card" href="<?php echo $link; ?>">
-                <div class="image">
-                  <img src="<?php echo $photo_url; ?>" alt="Image Not Updated Yet" width="100px" height="100px">
-                </div>
-                <div class="data">
-                  <p class="id">Uid:
-                    <?php echo $row["id"]; ?>
-                  </p>
-                  <p class="name">
-                    <?php echo $row["name"]; ?>
-                  </p>
-                  <p class="conumber">
-                    <?php echo $row["conumber"]; ?>
-                  </p>
-                  <p class="department">
-                    <?php echo $row["department"]; ?>
-                  </p>
-                </div>
-              </a>
-
-              <!-- Card End here -->
-              <?php
-            }
-        }
-        ?>
-        </div>
+      <div class="success-message">
+        <h2>Form Submitted Successfully!</h2>
+        <a href="../Visitor/Visitor.php" class="back-button"><small>Back to</small> Visitor Section</a>
       </div>
+    </div>
       <!-- Main Content Ends Here -->
     </div>
     <footer>
       <p>&copy; Gate Entry System <br> Developed by Mohit Patel and Raman Goyal</p>
     </footer>
   </section>
-  <script src="../scripts.js"></script>
+<script src="../scripts.js"></script>
 </body>
-
 </html>

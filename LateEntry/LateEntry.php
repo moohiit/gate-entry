@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html>
 
@@ -22,55 +25,53 @@
       <h5>Gate Entry System</h5>
     </div>
     <ul class="nav-links">
+      <?php
+      // Check if the user is an admin
+      if ($_SESSION['role'] == 'admin') {
+        ?>
+        <li class="nav-link">
+          <a href="../dashboard/dashboard.php">
+            <i class="bx bx-home-alt icon"></i>
+            <span class="text nav-text">Dashboard</span>
+          </a>
+        </li>
+      <?php } ?>
       <li class="nav-link">
         <a href="../Search/search.php">
           <i class="bx bx-search icon"></i>
           <span class="text nav-text">Search Student</span>
         </a>
       </li>
-
       <li class="nav-link">
         <a href="../addStudent/addStudent.php">
-          <i class="bx bx-add-to-queue icon"></i>
+          <i class="bx bx-user-plus icon"></i>
           <span class="text nav-text">Add Student</span>
         </a>
       </li>
-
+      <?php
+      // Check if the user is an admin
+      if ($_SESSION['role'] == 'admin') {
+        ?>
+        <li class="nav-link">
+          <a href="../Analytics/analytics.php">
+            <i class="bx bx-bar-chart icon"></i>
+            <span class="text nav-text">Analytics</span>
+          </a>
+        </li>
+      <?php } ?>
       <li class="nav-link">
-        <a href="../dashboard/dashboard.php">
-          <i class="bx bx-home-alt icon"></i>
-          <span class="text nav-text">Dashboard</span>
+        <a href="../Visitor/Visitor.php">
+          <i class='bx bx-group icon'></i>
+          <span class="text nav-text">Visitor Section</span>
         </a>
       </li>
-
-      <li class="nav-link">
-        <a href="../LateEntry/LateEntry.php">
-          <i class="bx bx-time icon"></i>
-          <span class="text nav-text">Late Entry</span>
-        </a>
-      </li>
-
-      <li class="nav-link">
-        <a href="../EarlyExit/EarlyExit.php">
-          <i class="bx bx-stopwatch icon"></i>
-          <span class="text nav-text">Early Exit</span>
-        </a>
-      </li>
-
-      <li class="nav-link">
-        <a href="../Analytics/analytics.php">
-          <i class="bx bx-bar-chart icon"></i>
-          <span class="text nav-text">Analytics</span>
-        </a>
-      </li>
-
       <li class="nav-link">
         <a href="../mail/mail.php">
           <i class="bx bx-mail-send icon"></i>
           <span class="text nav-text">Send Report</span>
         </a>
       </li>
-
+    
       <li class="log_out nav-link">
         <a href="../logout.php">
           <i class='bx bx-log-out bx-fade-left-hover'></i>
@@ -84,101 +85,82 @@
     <nav>
       <div class="sidebar-button">
         <i class='bx bx-menu sidebarBtn'></i>
-        <span class="dashboard">Gate Entry System</span>
+        <span class="dashboard">Late Entry Report</span>
       </div>
     </nav>
     <!-- Navbar ends Here -->
     <div class="home-content">
       <!-- Main Content Goes Here   -->
       <div class="main-content">
-      <?php
-      session_start();
-
-      // Check if the user is an admin
-      if ($_SESSION['role'] !== 'admin') {
-        ?>
-          <div class=access-denied>
-            <?php
-            echo "<div>You do not have permission to access this page.</div>";
-            // You may also redirect to a limited access page or the login page.
-            ?>
-            <div>
-              <a style="text-decoration: none;" href="../Search/search.php">Go to Homepage</a>
-            </div>
+          <div class="heading">
+            <h1>Today's Late Entry Report</h1>
           </div>
-          <?php
-      }else{
-      ?>
-      <div class="heading">
-        <h1>Today's Late Entry Report</h1>
-      </div>
-      <div class="table">
-        <table>
-          <thead>
-            <tr>
-              <th>Sr.No</th>
-              <th>Name</th>
-              <th>Department</th>
-              <th>Contact No.</th>
-              <th>Reason</th>
-              <th>Authorised BY</th>
-              <th>Time</th>
-              <th>Date</th>
-              <th>Photo</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            include '../database.php';
-            $sql = "SELECT * from inqury_data where status='Late' AND date=CURRENT_DATE";
-            $result = mysqli_query($conn, $sql);
-            $i = 1;
-            while ($row = mysqli_fetch_assoc($result)) {
-              ?>
+          <div class="table">
+            <table>
+              <thead>
                 <tr>
-                  <td>
-                    <?php echo $i ?>
-                  </td>
-                  <td>
-                    <?php echo $row["name"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["dprt"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["contact"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["reason"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["authorisedBy"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["currentime"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["date"] ?>
-                  </td>
-                  <td class="image-column">
-                    <img class="table-image" src="<?php echo $row["photo_url"] ?>" alt="Photo">
-                  </td>
+                  <th>Sr.No</th>
+                  <th>Name</th>
+                  <th>Department</th>
+                  <th>Contact No.</th>
+                  <th>Reason</th>
+                  <th>Authorised BY</th>
+                  <th>Time</th>
+                  <th>Date</th>
+                  <th>Photo</th>
                 </tr>
+              </thead>
+              <tbody>
                 <?php
-                $i++;
-            } ?>
-          </tbody>
-        </table>
+                include '../database.php';
+                $sql = "SELECT * from inqury_data where status='Late' AND date=CURRENT_DATE";
+                $result = mysqli_query($conn, $sql);
+                $i = 1;
+                while ($row = mysqli_fetch_assoc($result)) {
+                  ?>
+                  <tr>
+                    <td>
+                      <?php echo $i ?>
+                    </td>
+                    <td>
+                      <?php echo $row["name"] ?>
+                    </td>
+                    <td>
+                      <?php echo $row["dprt"] ?>
+                    </td>
+                    <td>
+                      <?php echo $row["contact"] ?>
+                    </td>
+                    <td>
+                      <?php echo $row["reason"] ?>
+                    </td>
+                    <td>
+                      <?php echo $row["authorisedBy"] ?>
+                    </td>
+                    <td>
+                      <?php echo $row["currentime"] ?>
+                    </td>
+                    <td>
+                      <?php echo $row["date"] ?>
+                    </td>
+                    <td class="image-column">
+                      <img class="table-image" src="<?php echo $row["photo_url"] ?>" alt="Photo">
+                    </td>
+                  </tr>
+                  <?php
+                  $i++;
+                } ?>
+              </tbody>
+            </table>
+          </div>
       </div>
-      <?php } ?>
-
-    </div>
       <!-- Main Content Ends Here -->
     </div>
-    <!-- <footer>
-      <p>&copy; Gate Entry System <br> Developed by Team XYZ</p>
-    </footer> -->
+    <footer>
+      <p>&copy; Gate Entry System <br> Developed by Mohit Patel and Raman Goyal</p>
+    </footer>
   </section>
-<script src="../scripts.js"></script>
+  <script src="../scripts.js"></script>
 </body>
+
 </html>

@@ -1,3 +1,7 @@
+<?php
+session_start();
+include '../database.php';
+?>
 <!DOCTYPE html>
 <html>
 
@@ -22,55 +26,53 @@
       <h5>Gate Entry System</h5>
     </div>
     <ul class="nav-links">
+      <?php
+      // Check if the user is an admin
+      if ($_SESSION['role'] == 'admin') {
+        ?>
+        <li class="nav-link">
+          <a href="../dashboard/dashboard.php">
+            <i class="bx bx-home-alt icon"></i>
+            <span class="text nav-text">Dashboard</span>
+          </a>
+        </li>
+      <?php } ?>
       <li class="nav-link">
         <a href="../Search/search.php">
           <i class="bx bx-search icon"></i>
           <span class="text nav-text">Search Student</span>
         </a>
       </li>
-
       <li class="nav-link">
         <a href="../addStudent/addStudent.php">
-          <i class="bx bx-add-to-queue icon"></i>
+          <i class="bx bx-user-plus icon"></i>
           <span class="text nav-text">Add Student</span>
         </a>
       </li>
-
+      <?php
+      // Check if the user is an admin
+      if ($_SESSION['role'] == 'admin') {
+        ?>
+        <li class="nav-link">
+          <a href="../Analytics/analytics.php">
+            <i class="bx bx-bar-chart icon"></i>
+            <span class="text nav-text">Analytics</span>
+          </a>
+        </li>
+      <?php } ?>
       <li class="nav-link">
-        <a href="../dashboard/dashboard.php">
-          <i class="bx bx-home-alt icon"></i>
-          <span class="text nav-text">Dashboard</span>
+        <a href="../Visitor/Visitor.php">
+          <i class='bx bx-group icon'></i>
+          <span class="text nav-text">Visitor Section</span>
         </a>
       </li>
-
-      <li class="nav-link">
-        <a href="../LateEntry/LateEntry.php">
-          <i class="bx bx-time icon"></i>
-          <span class="text nav-text">Late Entry</span>
-        </a>
-      </li>
-
-      <li class="nav-link">
-        <a href="../EarlyExit/EarlyExit.php">
-          <i class="bx bx-stopwatch icon"></i>
-          <span class="text nav-text">Early Exit</span>
-        </a>
-      </li>
-
-      <li class="nav-link">
-        <a href="../Analytics/analytics.php">
-          <i class="bx bx-bar-chart icon"></i>
-          <span class="text nav-text">Analytics</span>
-        </a>
-      </li>
-
       <li class="nav-link">
         <a href="../mail/mail.php">
           <i class="bx bx-mail-send icon"></i>
           <span class="text nav-text">Send Report</span>
         </a>
       </li>
-
+    
       <li class="log_out nav-link">
         <a href="../logout.php">
           <i class='bx bx-log-out bx-fade-left-hover'></i>
@@ -98,9 +100,9 @@
     </div>
       <!-- Main Content Ends Here -->
     </div>
-    <!-- <footer>
-      <p>&copy; Gate Entry System <br> Developed by Team XYZ</p>
-    </footer> -->
+    <footer>
+      <p>&copy; Gate Entry System <br> Developed by Mohit Patel and Raman Goyal</p>
+    </footer>
   </section>
 <script src="../scripts.js"></script>
 </body>

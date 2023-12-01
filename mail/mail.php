@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html>
 
@@ -22,55 +25,53 @@
       <h5>Gate Entry System</h5>
     </div>
     <ul class="nav-links">
+      <?php
+      // Check if the user is an admin
+      if ($_SESSION['role'] == 'admin') {
+        ?>
+        <li class="nav-link">
+          <a href="../dashboard/dashboard.php">
+            <i class="bx bx-home-alt icon"></i>
+            <span class="text nav-text">Dashboard</span>
+          </a>
+        </li>
+      <?php } ?>
       <li class="nav-link">
         <a href="../Search/search.php">
           <i class="bx bx-search icon"></i>
           <span class="text nav-text">Search Student</span>
         </a>
       </li>
-
       <li class="nav-link">
         <a href="../addStudent/addStudent.php">
-          <i class="bx bx-add-to-queue icon"></i>
+          <i class="bx bx-user-plus icon"></i>
           <span class="text nav-text">Add Student</span>
         </a>
       </li>
-
+      <?php
+      // Check if the user is an admin
+      if ($_SESSION['role'] == 'admin') {
+        ?>
+        <li class="nav-link">
+          <a href="../Analytics/analytics.php">
+            <i class="bx bx-bar-chart icon"></i>
+            <span class="text nav-text">Analytics</span>
+          </a>
+        </li>
+      <?php } ?>
       <li class="nav-link">
-        <a href="../dashboard/dashboard.php">
-          <i class="bx bx-home-alt icon"></i>
-          <span class="text nav-text">Dashboard</span>
+        <a href="../Visitor/Visitor.php">
+          <i class='bx bx-group icon'></i>
+          <span class="text nav-text">Visitor Section</span>
         </a>
       </li>
-
-      <li class="nav-link">
-        <a href="../LateEntry/LateEntry.php">
-          <i class="bx bx-time icon"></i>
-          <span class="text nav-text">Late Entry</span>
-        </a>
-      </li>
-
-      <li class="nav-link">
-        <a href="../EarlyExit/EarlyExit.php">
-          <i class="bx bx-stopwatch icon"></i>
-          <span class="text nav-text">Early Exit</span>
-        </a>
-      </li>
-
-      <li class="nav-link">
-        <a href="../Analytics/analytics.php">
-          <i class="bx bx-bar-chart icon"></i>
-          <span class="text nav-text">Analytics</span>
-        </a>
-      </li>
-
       <li class="nav-link">
         <a href="../mail/mail.php">
           <i class="bx bx-mail-send icon"></i>
           <span class="text nav-text">Send Report</span>
         </a>
       </li>
-
+    
       <li class="log_out nav-link">
         <a href="../logout.php">
           <i class='bx bx-log-out bx-fade-left-hover'></i>
@@ -84,65 +85,46 @@
     <nav>
       <div class="sidebar-button">
         <i class='bx bx-menu sidebarBtn'></i>
-        <span class="dashboard">Gate Entry System</span>
+        <span class="dashboard">Send Mail</span>
       </div>
     </nav>
     <!-- Navbar ends Here -->
     <div class="home-content">
       <!-- Main Content Goes Here   -->
       <div class="main-content">
-      <?php
-        session_start();
+          <div class="form-container">
+            <h3>Send Today's Report</h3>
+            <h6>To</h6>
+            <h4>Head of Department</h4>
+            <form method="post" id="mailForm" action="deptMail.php" class="form">
+              <div class="form-row">
+                <input type="submit" value="Send Mail" name="send_mail">
+              </div>
+            </form>
+            <div id="loader" style="display: none; ">
+              <img src="loader.gif" style="width: 100px; height: 100px;" alt="Loader">
+              <p>Sending Mail...</p>
+            </div>
+            <div id="statusMessages">
+              <?php
+              if (isset($_SESSION['mail_status'])) {
+                echo '<div class="alert alert-success"><p>' . $_SESSION['mail_status'] . '</p></div>';
+                unset($_SESSION['mail_status']);
+              }
+              if (isset($_SESSION['mail_error'])) {
+                echo '<div class="alert alert-error"><p>' . $_SESSION['mail_error'] . '</p></div>';
+                unset($_SESSION['mail_error']);
+              }
+              ?>
+            </div>
 
-        // Check if the user is an admin
-        if ($_SESSION['role'] !== 'admin') {
-          ?>
-          <div class=access-denied>
-            <?php
-            echo "<div>You do not have permission to access this page.</div>";
-            // You may also redirect to a limited access page or the login page.
-            ?>
-            <div>
-              <a style="text-decoration: none;" href="../Search/search.php">Go to Homepage</a>
-            </div>
           </div>
-          <?php
-        }else{
-        ?>
-        <div class="form-container">
-          <h3>Send Today's Report</h3>
-          <h6>To</h6>
-          <h4>Head of Department</h4>
-          <form method="post" id="mailForm" action="deptMail.php" class="form">
-            <div class="form-row">
-              <input type="submit" value="Send Mail" name="send_mail">
-            </div>
-          </form>
-          <div id="loader" style="display: none; ">
-            <img src="loader.gif" style="width: 100px; height: 100px;" alt="Loader">
-            <p>Sending Mail...</p>
-          </div>
-          <div id="statusMessages">
-            <?php
-            if (isset($_SESSION['mail_status'])) {
-              echo '<div class="alert alert-success"><p>' . $_SESSION['mail_status'] . '</p></div>';
-              unset($_SESSION['mail_status']);
-            }
-            if (isset($_SESSION['mail_error'])) {
-              echo '<div class="alert alert-error"><p>' . $_SESSION['mail_error'] . '</p></div>';
-              unset($_SESSION['mail_error']);
-            }
-            ?>
-          </div>
-      
-        </div>
-        <?php } ?>
       </div>
       <!-- Main Content Ends Here -->
     </div>
-    <!-- <footer>
-      <p>&copy; Gate Entry System <br> Developed by Team XYZ</p>
-    </footer> -->
+    <footer>
+      <p>&copy; Gate Entry System <br> Developed by Mohit Patel and Raman Goyal</p>
+    </footer>
   </section>
   <script>
     document.getElementById('mailForm').addEventListener('submit', function () {
@@ -164,6 +146,7 @@
     }
     ?>
   </script>
-<script src="../scripts.js"></script>
+  <script src="../scripts.js"></script>
 </body>
+
 </html>

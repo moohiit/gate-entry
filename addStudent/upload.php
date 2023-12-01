@@ -1,33 +1,31 @@
 <?php
-// Start session
-session_start();
-// Connect to the database
+// Include the database connection file
 include '../database.php';
-
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
+session_start();
 
 if (isset($_POST["submit"])) {
-  if (isset($_FILES["image"])) {
+  // Check if the resized image data is received from the client-side JavaScript
+  if (isset($_POST["resizedImageData"])) {
     // ImgBB API endpoint
     $imgbbApiUrl = "https://api.imgbb.com/1/upload";
 
     // Set your ImgBB API key
     $apiKey = "1ada3b3c96d91d229518a4bb06c14452";
 
-    // File details
-    $fileName = $_FILES["image"]["name"];
-    $fileTempName = $_FILES["image"]["tmp_name"];
+    // Get the received resized image data
+    $resizedImageData = $_POST["resizedImageData"];
+
+    // Convert the base64 image data to binary
+    $binaryImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $resizedImageData));
 
     // Create a unique name for the image to avoid overwriting
-    $uniqueName = uniqid("image_") . "_" . $fileName;
+    $uniqueName = uniqid("image_") . ".jpeg"; // Assuming you want JPEG format
 
     // Prepare the cURL request to ImgBB API
     $imgbbRequest = curl_init($imgbbApiUrl);
     $imgbbImageData = [
       'key' => $apiKey,
-      'image' => base64_encode(file_get_contents($fileTempName)),
+      'image' => base64_encode($binaryImageData),
       'name' => $uniqueName,
     ];
     curl_setopt($imgbbRequest, CURLOPT_POST, 1);
@@ -60,24 +58,27 @@ if (isset($_POST["submit"])) {
       $queryResult = $conn->query($sql);
       if ($queryResult === TRUE) {
         $_SESSION['success'] = "Image uploaded successfully and data saved in the database.";
-        //header to success
+        // Redirect to success page or handle as needed
         header("Location: success.php");
         exit();
       } else {
         $_SESSION['status'] = "Error saving data in the database: " . $conn->error . " (Query: $sql)";
+        // Redirect to addStudent page with an error message
         header("Location: addStudent.php");
+        exit();
       }
     } else {
       $_SESSION['status'] = "Error uploading image to ImgBB. HTTP Status: $imgbbHttpStatus";
+      // Redirect to addStudent page with an error message
       header("Location: addStudent.php");
+      exit();
     }
-
-    // Close the database connection
-    $conn->close();
-    exit();
   } else {
+    // This block is executed when the form is submitted without using JavaScript
     $_SESSION['status'] = "Please select an image to upload.";
+    // Redirect to addStudent page with an error message
     header("Location: addStudent.php");
+    exit();
   }
 }
 ?>

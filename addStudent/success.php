@@ -1,3 +1,7 @@
+<?php
+session_start();
+include '../database.php';
+?>
 <!DOCTYPE html>
 <html>
 
@@ -56,6 +60,12 @@
           <span class="text nav-text">Early Exit</span>
         </a>
       </li>
+      <li class="nav-link">
+        <a href="../otherReason/otherReason.php">
+          <i class="bx bx-collection icon"></i>
+          <span class="text nav-text">Miscellaneous</span>
+        </a>
+      </li>
 
       <li class="nav-link">
         <a href="../Analytics/analytics.php">
@@ -108,9 +118,9 @@
       </div>
       <!-- Main Content Ends Here -->
     </div>
-    <!-- <footer>
-      <p>&copy; Gate Entry System <br> Developed by Team XYZ</p>
-    </footer> -->
+    <footer>
+      <p>&copy; Gate Entry System <br> Developed by Mohit Patel and Raman Goyal</p>
+    </footer>
   </section>
   <script src="../scripts.js"></script>
 </body>

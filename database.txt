@@ -1,0 +1,7 @@
+<?php
+$host = "sql311.infinityfree.com";
+$username = "if0_35461948";
+$password = "qMbGGhvWcagh4VV";
+$dbname = "if0_35461948_gate";
+$conn=mysqli_connect($host,$username,$password,$dbname);
+?>

@@ -9,7 +9,7 @@
 .success-message {
     position: absolute;
     top: 20%;
-    background-color: #018374;
+    background-color: #0C356A;
     color: #fff;
     text-align: center;
     padding: 20px;
@@ -33,7 +33,7 @@
     margin-top: 20px;
     text-decoration: none;
     color: #fff;
-    background-color: #4CAF50; /* Change to bluish color */
+    background-color: #4c63af; /* Change to bluish color */
     padding: 10px 20px;
     border-radius: 5px;
     font-weight: bold;
@@ -41,7 +41,7 @@
 }
 
 .back-button:hover {
-    background-color: #005C8A; /* Change to a slightly darker shade for hover effect */
-    color: #f0f0f0;
+    background-color: #071952; /* Change to a slightly darker shade for hover effect */
+    color: #fff;
     text-decoration: none;
 }

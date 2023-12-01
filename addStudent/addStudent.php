@@ -26,48 +26,46 @@ session_start();
       <h5>Gate Entry System</h5>
     </div>
     <ul class="nav-links">
+      <?php
+      // Check if the user is an admin
+      if ($_SESSION['role'] == 'admin') {
+        ?>
+        <li class="nav-link">
+          <a href="../dashboard/dashboard.php">
+            <i class="bx bx-home-alt icon"></i>
+            <span class="text nav-text">Dashboard</span>
+          </a>
+        </li>
+      <?php } ?>
       <li class="nav-link">
         <a href="../Search/search.php">
           <i class="bx bx-search icon"></i>
           <span class="text nav-text">Search Student</span>
         </a>
       </li>
-
       <li class="nav-link">
         <a href="../addStudent/addStudent.php">
-          <i class="bx bx-add-to-queue icon"></i>
+          <i class="bx bx-user-plus icon"></i>
           <span class="text nav-text">Add Student</span>
         </a>
       </li>
-
+      <?php
+      // Check if the user is an admin
+      if ($_SESSION['role'] == 'admin') {
+        ?>
+        <li class="nav-link">
+          <a href="../Analytics/analytics.php">
+            <i class="bx bx-bar-chart icon"></i>
+            <span class="text nav-text">Analytics</span>
+          </a>
+        </li>
+      <?php } ?>
       <li class="nav-link">
-        <a href="../dashboard/dashboard.php">
-          <i class="bx bx-home-alt icon"></i>
-          <span class="text nav-text">Dashboard</span>
+        <a href="../Visitor/Visitor.php">
+          <i class='bx bx-group icon'></i>
+          <span class="text nav-text">Visitor Section</span>
         </a>
       </li>
-
-      <li class="nav-link">
-        <a href="../LateEntry/LateEntry.php">
-          <i class="bx bx-time icon"></i>
-          <span class="text nav-text">Late Entry</span>
-        </a>
-      </li>
-
-      <li class="nav-link">
-        <a href="../EarlyExit/EarlyExit.php">
-          <i class="bx bx-stopwatch icon"></i>
-          <span class="text nav-text">Early Exit</span>
-        </a>
-      </li>
-
-      <li class="nav-link">
-        <a href="../Analytics/analytics.php">
-          <i class="bx bx-bar-chart icon"></i>
-          <span class="text nav-text">Analytics</span>
-        </a>
-      </li>
-
       <li class="nav-link">
         <a href="../mail/mail.php">
           <i class="bx bx-mail-send icon"></i>
@@ -88,7 +86,7 @@ session_start();
     <nav>
       <div class="sidebar-button">
         <i class='bx bx-menu sidebarBtn'></i>
-        <span class="dashboard">Gate Entry System</span>
+        <span class="dashboard">Add Student</span>
       </div>
     </nav>
     <!-- Navbar ends Here -->
@@ -109,69 +107,129 @@ session_start();
             </div>
           </div>
           <?php
-        }else{
-        ?>
-        <div class="form-container">
-          <form action="upload.php" class="form" method="post" enctype="multipart/form-data">
-            <h2 class="form-heading">Student Details</h2>
-            <center>
-              <h3 style="color: red;font-size: x-small;">
-                <?php if (isset($_SESSION['status'])) {
-                  echo $_SESSION['status'];
-                  unset($_SESSION['status']);
-                }
-                ?>
-              </h3>
-            </center>
-            <div class="form-row">
-              <label for="name">Name</label>
-              <input type="text" name="name">
-            </div>
-            <div class="form-row">
-              <label for="dprt">Department</label>
-              <select name="dprt">
-                <option value="select">Select Department</option>
-                <?php
-                $sql = "SELECT * from department";
-                $result = mysqli_query($conn, $sql);
-                while ($row = mysqli_fetch_assoc($result)) {
+        } else {
+          ?>
+          <div class="form-container">
+            <form action="upload.php" class="form" method="post" enctype="multipart/form-data">
+              <h2 class="form-heading">Student Details</h2>
+              <center>
+                <h3 style="color: red;font-size: x-small;">
+                  <?php if (isset($_SESSION['status'])) {
+                    echo $_SESSION['status'];
+                    unset($_SESSION['status']);
+                  }
                   ?>
-                  <option value="<?php echo $row["department"] ?>">
-                    <?php echo $row["department"] ?>
-                  </option>
+                </h3>
+              </center>
+              <div class="form-row">
+                <label for="name">Name</label>
+                <input type="text" name="name">
+              </div>
+              <div class="form-row">
+                <label for="dprt">Department</label>
+                <select name="dprt">
+                  <option value="select">Select Department</option>
                   <?php
-                } ?>
-              </select>
-            </div>
-            <div class="form-row">
-              <label for="year">Year</label>
-              <select name="year" required>
-                <option value="First Year">First Year</option>
-                <option value="Second Year">Second Year</option>
-                <option value="Third Year">Third Year</option>
-              </select>
-            </div>
-            <div class="form-row">
-              <label for="mobile">Mobile No.</label>
-              <input type="text" name="mobile" required>
-            </div>
-            <div class="form-row">
-              <label for="">Photo:</label>
-              <input type="file" name="image" id="image" required>
-            </div>
-            <div class="form-row">
-              <input type="submit" value="submit" class="btn" name="submit">
-            </div>
-          </form>
-        </div>
+                  $sql = "SELECT * from department";
+                  $result = mysqli_query($conn, $sql);
+                  while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                    <option value="<?php echo $row["department"] ?>">
+                      <?php echo $row["department"] ?>
+                    </option>
+                    <?php
+                  } ?>
+                </select>
+              </div>
+              <div class="form-row">
+                <label for="year">Year</label>
+                <select name="year" required>
+                  <option value="First Year">First Year</option>
+                  <option value="Second Year">Second Year</option>
+                  <option value="Third Year">Third Year</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label for="mobile">Mobile No.</label>
+                <input type="text" name="mobile" id="mobile" required>
+                <small id="mobileError" style="color: red;" class="form-error"></small>
+              </div>
+              <div class="form-row">
+                <label for="">Photo:</label>
+                <input type="file" name="image" id="image" accept="image/*" required onchange="resizeImage()">
+                <!-- Hidden input for resized image data -->
+                <input type="hidden" name="resizedImageData" id="resizedImageData">
+              </div>
+              <div class="form-row">
+                <input type="submit" value="submit" class="btn" name="submit">
+              </div>
+            </form>
+          </div>
         <?php } ?>
       </div>
       <!-- Main Content Ends Here -->
     </div>
-    <!-- <footer>
-      <p>&copy; Gate Entry System <br> Developed by Team XYZ</p>
-    </footer> -->
+    <footer>
+      <p>&copy; Gate Entry System <br> Developed by Mohit Patel and Raman Goyal</p>
+    </footer>
   </section>
+  <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.0.5"></script>
+  <script>
+    async function resizeImage() {
+      var input = document.getElementById('image');
+      var file = input.files[0];
+
+      if (file) {
+        const compressedImage = await new Compressor(file, {
+          quality: 0.5, // Adjust the quality (0 to 1)
+          maxWidth: 800, // Maximum width
+          maxHeight: 600, // Maximum height
+          success(result) {
+            // Set the resized image data to the hidden input
+            const reader = new FileReader();
+            reader.onload = () => {
+              document.getElementById('resizedImageData').value = reader.result;
+
+              // Optionally, display the resized image (for testing purposes)
+              const resizedImage = new Image();
+              resizedImage.src = reader.result;
+              console.log(result);
+              document.body.appendChild(resizedImage);
+            };
+            reader.readAsDataURL(result);
+          },
+          error(err) {
+            console.error(err.message);
+          },
+        });
+      }
+    }
+
+    //mobile Validation
+    document.addEventListener('DOMContentLoaded', function () {
+      var mobileInput = document.getElementById('mobile');
+      var mobileError = document.getElementById('mobileError');
+
+      mobileInput.addEventListener('input', function () {
+        validateMobileNumber();
+      });
+
+      function validateMobileNumber() {
+        var mobileRegex = /^[0-9]{10}$/;
+        var mobileValue = mobileInput.value;
+
+        if (!mobileRegex.test(mobileValue)) {
+          mobileError.textContent = 'Invalid mobile number. Please enter a 10-digit number.';
+          mobileInput.setCustomValidity('Invalid mobile number');
+        } else {
+          mobileError.textContent = '';
+          mobileInput.setCustomValidity('');
+        }
+      }
+    });
+  </script>
+
+
   <script src="../scripts.js"></script>
 </body>
 

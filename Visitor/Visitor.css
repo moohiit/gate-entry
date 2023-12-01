@@ -48,13 +48,19 @@
   border: 2px solid rgb(248, 5, 5);
 }
 
+.card-container .card:nth-child(3):hover{
+  transform:none;
+}
+
 .card-container .card:nth-child(4) {
   background: linear-gradient(to right, #fffd86 0%, rgb(229, 255, 0) 100%);
   color: rgb(51, 133, 93);
   border: 2px solid rgb(244, 248, 5);
-  height: 160px;
 }
 
+.card-container .card:nth-child(4):hover{
+  transform:none;
+}
 
 .card-container .card a {
   font-size: 2.5em;
@@ -69,7 +75,7 @@
   margin-bottom: 0.1rem;
 }
 
-.nav-links .nav-link a[href*="../dashboard/dashboard.php"] {
+.nav-links .nav-link a[href*="../Visitor/Visitor.php"]{
   border: white 2px solid;
   border-radius: 5px;
 }

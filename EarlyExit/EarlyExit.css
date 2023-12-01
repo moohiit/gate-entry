@@ -127,11 +127,10 @@ input[type="button"] {
   line-height: 1.5;
 }
 
-.nav-links .nav-link a[href*="../EarlyExit/EarlyExit.php"] {
+.nav-links .nav-link a[href*="../dashboard/dashboard.php"]{
   border: white 2px solid;
   border-radius: 5px;
 }
-
 .table {
   margin: 0 auto; /* Center the table */
   border-collapse: collapse; /* Collapse border spacing */
