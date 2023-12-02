@@ -1,9 +1,6 @@
 <?php
 session_start();
 include '../database.php';
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -16,7 +13,7 @@ if ($conn->connect_error) {
   <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" type="text/css"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="EarlyExit.css">
+  <link rel="stylesheet" href="seemore.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gate Entry System</title>
   <link rel="stylesheet" href="../styles.css">
@@ -89,80 +86,58 @@ if ($conn->connect_error) {
     <nav>
       <div class="sidebar-button">
         <i class='bx bx-menu sidebarBtn'></i>
-        <span class="dashboard">EarlyExit Report</span>
+        <span class="dashboard">Gate Entry System</span>
       </div>
     </nav>
     <!-- Navbar ends Here -->
     <div class="home-content">
       <!-- Main Content Goes Here   -->
       <div class="main-content">
+        <?php
+        if (isset($_GET['id'])) {
+          $id = $_GET['id'];
+          $fromDate = $_SESSION["from"] ?? null;
+          // unset($_SESSION['from']);
+          $toDate = $_SESSION["to"] ?? null;
+          // unset($_SESSION['to']);
+        }
+        ?>
         <div class="heading">
-          <h1>Early Exit Report</h1>
+          <h1>
+            Student Report
+          </h1>
         </div>
         <div class="table">
-          <form class="form" method="post">
-            <div class="form-row">
-              <label for="from">From:</label>
-              <input id="from" type="date" name="from">
-            </div>
-            <div class="form-row">
-              <label for="to">To:</label>
-              <input id="to" type="date" name="to">
-            </div>
-            <div class="form-row">
-                <label for="dprt">Department:</label>
-                <select name="dprt">
-                  <option value="select">Select Department</option>
-                <?php
-                $sql = "SELECT * from department";
-                $result = mysqli_query($conn, $sql);
-                while ($row = mysqli_fetch_assoc($result)) {
-                  ?>
-                  <option value="<?php echo $row["department"] ?>">
-                    <?php echo $row["department"] ?>
-                  </option>
-                  <?php
-                } ?>
-              </select>
-            </div>
-            <div class="form-row">
-              <input type="submit" class="btn" name="btn">
-            </div>
-          </form>
-          <?php
-          // Initialize $fromDate and $toDate
-          $fromDate = null;
-          $toDate = null;
-          $department = null;
-          if (isset($_POST["btn"])) {
-            $fromDate = $_POST['from'] ?? null;
-            $toDate = $_POST['to'] ?? null;
-            $department = $_POST['dprt'] ?? null;
-          }
-          ?>
           <table>
             <thead>
               <tr>
                 <th>Sr.No</th>
                 <th>Name</th>
                 <th>Department</th>
+                <th>Year</th>
                 <th>Contact No.</th>
                 <th>Reason</th>
-                <th>Authorised By</th>
-                <th>Time</th>
-                <th>Date</th>
                 <th>Photo</th>
               </tr>
             </thead>
             <tbody>
               <?php
               // Use prepared statements to prevent SQL injection
-              if ($fromDate && $toDate && $department) {
-                $sql = "SELECT * FROM inqury_data WHERE `date` BETWEEN '$fromDate' AND '$toDate' AND status='Early' AND dprt = '$department'";
-              } else {
-                $sql = "SELECT * FROM inqury_data WHERE `date` = CURRENT_DATE AND status='Early'";
+              if ($fromDate && $toDate) {
+                $sql1 = "SELECT student_id, name, dprt AS department, year, contact, reason, photo_url FROM inqury_data WHERE `date` BETWEEN ? AND ? AND student_id=?";
+                $stmt1 = $conn->prepare($sql1);
+                $stmt1->bind_param("sss", $fromDate, $toDate, $id);
+              } else if ($fromDate == null && $toDate == null) {
+                $sql1 = "SELECT student_id, name, dprt AS department, year, contact, reason, photo_url FROM inqury_data WHERE month(`date`) = month(CURRENT_DATE) AND student_id=?";
+                $stmt1 = $conn->prepare($sql1);
+                $stmt1->bind_param("s", $id);
               }
-              $result = mysqli_query($conn, $sql);
+
+              // Execute the query
+              $stmt1->execute();
+
+              // Get the result set
+              $result = $stmt1->get_result();
               $i = 1;
               while ($row = mysqli_fetch_assoc($result)) {
                 ?>
@@ -171,10 +146,13 @@ if ($conn->connect_error) {
                     <?php echo $i ?>
                   </td>
                   <td>
-                    <?php echo $row["name"]; ?>
+                    <?php echo $row['name'] ?>
                   </td>
                   <td>
-                    <?php echo $row["dprt"] ?>
+                    <?php echo $row["department"] ?>
+                  </td>
+                  <td>
+                    <?php echo $row["year"] ?>
                   </td>
                   <td>
                     <?php echo $row["contact"] ?>
@@ -182,25 +160,21 @@ if ($conn->connect_error) {
                   <td>
                     <?php echo $row["reason"] ?>
                   </td>
-                  <td>
-                    <?php echo $row["authorisedBy"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["currentime"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["date"] ?>
-                  </td>
-                  <td class="image-column">
-                    <img class="table-image" src="<?php echo $row["photo_url"] ?>" alt="Photo">
-                  </td>
+                  <td><img class="table-image" src="<?php echo $row["photo_url"] ?>" alt="Photo"></td>
                 </tr>
                 <?php
                 $i++;
-              } ?>
+              }
+
+              // Close the statement
+              $stmt1->close();
+              // Close the connection
+              $conn->close();
+              ?>
             </tbody>
           </table>
         </div>
+
       </div>
       <!-- Main Content Ends Here -->
     </div>

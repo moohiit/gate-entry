@@ -22,6 +22,11 @@ body{
   text-align: center;
 }
 
+.nav-links .nav-link a[href*="../Analytics/analytics.php"] {
+  border: white 2px solid;
+  border-radius: 5px;
+}
+
 .table {
   margin: 0 auto; /* Center the table */
   border-collapse: collapse; /* Collapse border spacing */

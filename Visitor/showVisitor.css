@@ -22,10 +22,15 @@ body{
 /* Add this CSS to your existing CSS file or in a separate style.css file */
 
 .form {
-  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #f7f7f7;
+  padding: 10px;
+  /* background-color: #f7f7f7; */
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -37,35 +42,40 @@ body{
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin: 5px;
+  width: 250px;
 }
 
-.label {
+label {
   flex: 1;
   text-align: right;
   padding-right: 10px;
+  margin-bottom: 0;
 }
 
-.input {
+input,
+textarea,
+select {
   flex: 2;
-  padding: 10px;
+  padding: 4px;
   width: 100%;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
-input[type="submit"],
-input[type="button"] {
+.btn {
   display: block;
   margin: 0 auto;
-  padding: 10px 20px;
-  background-color: #695cfe;
+  /* padding: 10px 20px; */
+  background-color: #0c356a;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
+  margin-inline: 35px;
 }
+
 
 /* Style the form as per your requirements */
 

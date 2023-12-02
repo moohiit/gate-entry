@@ -1,6 +1,9 @@
 <?php
 session_start();
 include '../database.php';
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -72,7 +75,7 @@ include '../database.php';
           <span class="text nav-text">Send Report</span>
         </a>
       </li>
-    
+
       <li class="log_out nav-link">
         <a href="../logout.php">
           <i class='bx bx-log-out bx-fade-left-hover'></i>
@@ -93,33 +96,78 @@ include '../database.php';
     <div class="home-content">
       <!-- Main Content Goes Here   -->
       <div class="main-content">
-      
-      <div class="heading">
-        <h1>Today's Miscellaneous Report</h1>
-      </div>
-      <div class="table">
-        <table>
-          <thead>
-            <tr>
-              <th>Sr.No</th>
-              <th>Name</th>
-              <th>Department</th>
-              <th>Contact No.</th>
-              <th>Issue</th>
-              <th>Reason</th>
-              <th>Authorised BY</th>
-              <th>Time</th>
-              <th>Date</th>
-              <th>Photo</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            $sql = "SELECT * from inqury_data where status NOT IN ('Late', 'Early') AND date=CURRENT_DATE";
-            $result = mysqli_query($conn, $sql);
-            $i = 1;
-            while ($row = mysqli_fetch_assoc($result)) {
-              ?>
+
+        <div class="heading">
+          <h1>Miscellaneous Report</h1>
+        </div>
+        <div class="table">
+          <form class="form" method="post">
+            <div class="form-row">
+              <label for="from">From:</label>
+              <input id="from" type="date" name="from">
+            </div>
+            <div class="form-row">
+              <label for="to">To:</label>
+              <input id="to" type="date" name="to">
+            </div>
+            <div class="form-row">
+                <label for="dprt">Department:</label>
+                <select name="dprt">
+                  <option value="select">Select Department</option>
+                <?php
+                $sql = "SELECT * from department";
+                $result = mysqli_query($conn, $sql);
+                while ($row = mysqli_fetch_assoc($result)) {
+                  ?>
+                  <option value="<?php echo $row["department"] ?>">
+                    <?php echo $row["department"] ?>
+                  </option>
+                  <?php
+                } ?>
+              </select>
+            </div>
+            <div class="form-row">
+              <input type="submit" class="btn" name="btn">
+            </div>
+          </form>
+          <?php
+          // Initialize $fromDate and $toDate
+          $fromDate = null;
+          $toDate = null;
+          $department = null;
+          if (isset($_POST["btn"])) {
+            $fromDate = $_POST['from'] ?? null;
+            $toDate = $_POST['to'] ?? null;
+            $department = $_POST['dprt'] ?? null;
+          }
+          ?>
+          <table>
+            <thead>
+              <tr>
+                <th>Sr.No</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Contact No.</th>
+                <th>Issue</th>
+                <th>Reason</th>
+                <th>Authorised BY</th>
+                <th>Time</th>
+                <th>Date</th>
+                <th>Photo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              // Use prepared statements to prevent SQL injection
+              if ($fromDate && $toDate && $department) {
+                $sql = "SELECT * FROM inqury_data WHERE `date` BETWEEN '$fromDate' AND '$toDate' AND status NOT IN ('Late','Early') AND dprt = '$department'";
+              } else {
+                $sql = "SELECT * FROM inqury_data WHERE `date` = CURRENT_DATE AND status NOT IN ('Late','Early')";
+              }
+              $result = mysqli_query($conn, $sql);
+              $i = 1;
+              while ($row = mysqli_fetch_assoc($result)) {
+                ?>
                 <tr>
                   <td>
                     <?php echo $i ?>
@@ -154,17 +202,18 @@ include '../database.php';
                 </tr>
                 <?php
                 $i++;
-            } ?>
-          </tbody>
-        </table>
+              } ?>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
       <!-- Main Content Ends Here -->
     </div>
     <footer>
       <p>&copy; Gate Entry System <br> Developed by Mohit Patel and Raman Goyal</p>
     </footer>
   </section>
-<script src="../scripts.js"></script>
+  <script src="../scripts.js"></script>
 </body>
+
 </html>

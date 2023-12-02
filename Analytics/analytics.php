@@ -119,6 +119,13 @@ session_start();
             while ($row = mysqli_fetch_assoc($result)) {
               $department = $row["department"];
               $_SESSION["department"] = $department;
+
+              //unset the session variables
+              unset($_SESSION['fromDate']);
+              unset($_SESSION['toDate']);
+              unset($_SESSION['from']);
+              unset($_SESSION['to']);
+              
               // Initialize $fromDate and $toDate
               $fromDate = null;
               $toDate = null;

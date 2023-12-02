@@ -1,5 +1,9 @@
 <?php
 session_start();
+include '../database.php';
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -93,9 +97,31 @@ session_start();
       <!-- Main Content Goes Here   -->
       <div class="main-content">
         <div class="heading">
-          <h1>Today's Visitor Report</h1>
+          <h1>Visitor Report</h1>
         </div>
         <div class="table">
+          <form class="form" method="post">
+            <div class="form-row">
+              <label for="from">From:</label>
+              <input id="from" type="date" name="from">
+            </div>
+            <div class="form-row">
+              <label for="to">To:</label>
+              <input id="to" type="date" name="to">
+            </div>
+            <div class="form-row">
+              <input type="submit" class="btn" name="btn">
+            </div>
+          </form>
+          <?php
+          // Initialize $fromDate and $toDate
+          $fromDate = null;
+          $toDate = null;
+          if (isset($_POST["btn"])) {
+            $fromDate = $_POST['from'] ?? null;
+            $toDate = $_POST['to'] ?? null;
+          }
+          ?>
           <table>
             <thead>
               <tr>
@@ -110,7 +136,11 @@ session_start();
             <tbody>
               <?php
               include '../database.php';
-              $sql = "SELECT * from visitor where date=CURRENT_DATE";
+              if ($fromDate && $toDate) {
+                $sql = "SELECT * FROM visitor WHERE `date` BETWEEN '$fromDate' AND '$toDate'";
+              } else {
+                $sql = "SELECT * from visitor where date=CURRENT_DATE";
+              }
               $result = mysqli_query($conn, $sql);
               $i = 1;
               while ($row = mysqli_fetch_assoc($result)) {

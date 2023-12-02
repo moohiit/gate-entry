@@ -98,9 +98,11 @@ include '../database.php';
         if (isset($_GET['id'])) {
           $department = $_GET['id'];
           $fromDate = $_SESSION["fromDate"] ?? null;
-          unset($_SESSION['fromDate']);
+          // unset($_SESSION['fromDate']);
+          $_SESSION['from'] = $fromDate;
           $toDate = $_SESSION["toDate"] ?? null;
-          unset($_SESSION['toDate']);
+          // unset($_SESSION['toDate']);
+          $_SESSION['to'] = $toDate;
         }
         ?>
         <div class="heading">
@@ -130,7 +132,7 @@ include '../database.php';
                 $stmt1 = $conn->prepare($sql1);
                 $stmt1->bind_param("sss", $fromDate, $toDate, $department);
               } else if ($fromDate == null && $toDate == null) {
-                $sql1 = "SELECT student_id, name, dprt AS department, year, contact, COUNT(*) as warnings, photo_url FROM inqury_data WHERE DATE(`date`) = CURRENT_DATE AND dprt=? GROUP BY student_id";
+                $sql1 = "SELECT student_id, name, dprt AS department, year, contact, COUNT(*) as warnings, photo_url FROM inqury_data WHERE month(`date`) = month(CURRENT_DATE) AND dprt=? GROUP BY student_id";
                 $stmt1 = $conn->prepare($sql1);
                 $stmt1->bind_param("s", $department);
               }
@@ -148,10 +150,12 @@ include '../database.php';
                     <?php //echo $i ?>
                   </td>-->
                   <td> 
-                    <?php echo $row["student_id"] ?>
+                    <?php
+                    $id = $row['student_id'];
+                    echo $row["student_id"] ?>
                   </td>
                   <td>
-                    <?php echo $row["name"] ?>
+                    <a href="studentDetails.php?id=<?php echo $id ?>" style="color:blue;"><?php echo $row['name'] ?></a>
                   </td>
                   <td>
                     <?php echo $row["department"] ?>

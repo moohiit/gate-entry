@@ -1,4 +1,4 @@
-body{
+body {
   min-width: fit-content;
 }
 
@@ -18,56 +18,6 @@ body{
   justify-content: center;
   align-items: center;
 }
-
-/* Add this CSS to your existing CSS file or in a separate style.css file */
-
-.form {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f7f7f7;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.form-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.label {
-  flex: 1;
-  text-align: right;
-  padding-right: 10px;
-}
-
-.input {
-  flex: 2;
-  padding: 10px;
-  width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-input[type="submit"],
-input[type="button"] {
-  display: block;
-  margin: 0 auto;
-  padding: 10px 20px;
-  background-color: #695cfe;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-/* Style the form as per your requirements */
 
 .card-container {
   display: flex;
@@ -128,9 +78,64 @@ input[type="button"] {
   line-height: 1.5;
 }
 
-.nav-links .nav-link a[href*="../dashboard/dashboard.php"]{
+.nav-links .nav-link a[href*="../dashboard/dashboard.php"] {
   border: white 2px solid;
   border-radius: 5px;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  padding: 10px;
+  /* background-color: #f7f7f7; */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px;
+  width: 250px;
+}
+
+label {
+  flex: 1;
+  text-align: right;
+  padding-right: 10px;
+  margin-bottom: 0;
+}
+
+input,
+textarea,
+select {
+  flex: 2;
+  padding: 4px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.btn {
+  display: block;
+  margin: 0 auto;
+  /* padding: 10px 20px; */
+  background-color: #0c356a;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-inline: 35px;
 }
 
 .table {
@@ -154,16 +159,17 @@ th {
   background-color: #343f71;
   color: #fff;
 }
-.table td, .table th {
-    padding: 0.3rem;
-    vertical-align: middle;
-    border-top: 1px solid #dee2e6;
+.table td,
+.table th {
+  padding: 0.3rem;
+  vertical-align: middle;
+  border-top: 1px solid #dee2e6;
 }
 tr:nth-child(even) {
   background-color: #f7f7f7;
 }
 tr:nth-child(odd) {
-  background-color:#4858a03d;
+  background-color: #4858a03d;
 }
 
 .image-column {

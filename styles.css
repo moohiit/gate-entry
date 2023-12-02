@@ -21,7 +21,7 @@
 .sidebar {
   position: fixed;
   height: 100%;
-  width: 240px;
+  width: 200px;
   /* background: #AA0000; */
   background: #0C356A;
   /* Light red background color */
@@ -127,8 +127,8 @@
   position: relative;
   background: #f5f5f5;
   min-height: 100vh;
-  width: calc(100% - 240px);
-  left: 240px;
+  width: calc(100% - 200px);
+  left: 200px;
   transition: all 0.5s ease;
 }
 
@@ -145,8 +145,8 @@
   display: flex;
   align-items: center;
   position: fixed;
-  width: calc(100% - 240px);
-  left: 240px;
+  width: calc(100% - 200px);
+  left: 200px;
   z-index: 100;
   padding: 0 5px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
@@ -193,8 +193,8 @@ footer {
   background: #0C356A;
   color: #f5f5f5;
   height: fit-content;
-  width: calc(100% - 240px);
-  left: 240px;
+  width: calc(100% - 200px);
+  left: 200px;
   z-index: 100;
   padding: 0 5px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
@@ -228,7 +228,7 @@ footer p {
   }
 
   .sidebar.active {
-    width: 220px;
+    width: 200px;
   }
 
   .home-section {
@@ -238,7 +238,7 @@ footer p {
 
   .sidebar.active ~ .home-section {
     overflow: hidden;
-    left: 220px;
+    left: 200px;
   }
 
   .home-section nav {
@@ -251,12 +251,12 @@ footer p {
   }
 
   .sidebar.active ~ .home-section nav {
-    width: calc(100% - 220px);
-    left: 220px;
+    width: calc(100% - 200px);
+    left: 200px;
   }
   .sidebar.active ~ .home-section footer {
-    width: calc(100% - 220px);
-    left: 220px;
+    width: calc(100% - 200px);
+    left: 200px;
   }
 }
 
