@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['role'])) {
+  header("Location: ../index.php");
+  exit();
+}
 include '../database.php';
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);

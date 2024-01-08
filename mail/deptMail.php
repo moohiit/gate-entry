@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['role'])) {
+  header("Location: ../index.php");
+  exit();
+}
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 

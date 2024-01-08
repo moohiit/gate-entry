@@ -1,5 +1,24 @@
 <?php
 session_start();
+if (!isset($_SESSION['role'])) {
+  header("Location: ../index.php");
+  exit();
+}
+include '../database.php';
+// // Unset the session variables first
+// unset($_SESSION['fromDate']);
+// unset($_SESSION['toDate']);
+// Initialize $fromDate and $toDate
+$fromDate = null;
+$toDate = null;
+if (isset($_POST["btn"])) {
+  $fromDate = $_POST['from'] ?? null;
+  $toDate = $_POST['to'] ?? null;
+}
+
+// // Set new values for the session variables
+// $_SESSION['fromDate'] = $fromDate;
+// $_SESSION['toDate'] = $toDate;
 ?>
 <!DOCTYPE html>
 <html>
@@ -72,7 +91,7 @@ session_start();
           <span class="text nav-text">Send Report</span>
         </a>
       </li>
-    
+
       <li class="log_out nav-link">
         <a href="../logout.php">
           <i class='bx bx-log-out bx-fade-left-hover'></i>
@@ -93,226 +112,215 @@ session_start();
     <div class="home-content">
       <!-- Main Content Goes Here   -->
       <div class="main-content">
-        
-          <div class="heading">
-            <h1>Analytics</h1>
-          </div>
 
-          <div class="dashboard-container">
-            <form class="form" method="post">
-              <div class="form-row">
-                <label for="from">From:</label>
-                <input id="from" type="date" name="from">
-              </div>
-              <div class="form-row">
-                <label for="to">To:</label>
-                <input id="to" type="date" name="to">
-              </div>
-              <div class="form-row">
-                <input type="submit" class="btn" name="btn">
-              </div>
-            </form>
-            <?php
-            include '../database.php';
-            $sql = "SELECT department from department";
-            $result = mysqli_query($conn, $sql);
-            while ($row = mysqli_fetch_assoc($result)) {
-              $department = $row["department"];
-              $_SESSION["department"] = $department;
+        <div class="heading">
+          <h1>Analytics</h1>
+        </div>
 
-              //unset the session variables
-              unset($_SESSION['fromDate']);
-              unset($_SESSION['toDate']);
-              unset($_SESSION['from']);
-              unset($_SESSION['to']);
-              
-              // Initialize $fromDate and $toDate
-              $fromDate = null;
-              $toDate = null;
+        <div class="dashboard-container">
+          <form class="form" method="post">
+            <div class="form-row">
+              <label for="from">From:</label>
+              <input id="from" type="date" name="from">
+            </div>
+            <div class="form-row">
+              <label for="to">To:</label>
+              <input id="to" type="date" name="to">
+            </div>
+            <div class="form-row">
+              <input type="submit" class="btn" name="btn">
+            </div>
+          </form>
+          <?php
+          $sql = "SELECT department from department";
+          $result = mysqli_query($conn, $sql);
+          while ($row = mysqli_fetch_assoc($result)) {
+            $department = $row["department"];
+            $_SESSION["department"] = $department;
+            ?>
+            <div class="tab">
+              <div class="tab-content">
+                <h1>
+                  <center>
+                    <?php echo $department ?>
+                  </center>
+                </h1>
+                <div class="content">
+                  <div class="content-row">
+                    <p>Total Late Entry: <span>
+                        <?php
+                        // Create connection
+                        include '../database.php';
+                        if ($conn->connect_error) {
+                          die("Connection failed: " . $conn->connect_error);
+                        }
+                        // Use prepared statements to prevent SQL injection
+                        if ($fromDate && $toDate) {
+                          $sql1 = "SELECT COUNT(*) as count FROM inqury_data WHERE `date` BETWEEN ? AND ? AND status='Late' AND dprt=?";
+                        } else {
+                          $sql1 = "SELECT COUNT(*) as count FROM inqury_data WHERE `date` = CURRENT_DATE AND status='Late' AND dprt=?";
+                        }
 
-              if (isset($_POST["btn"])) {
-                $fromDate = $_POST['from'] ?? null;
-                $_SESSION['fromDate'] = $fromDate;
-                $toDate = $_POST['to'] ?? null;
-                $_SESSION['toDate'] = $toDate;
-              }
-              ?>
-              <div class="tab">
-                <div class="tab-content">
-                  <h1>
-                    <center>
-                      <?php echo $department ?>
-                    </center>
-                  </h1>
-                  <div class="content">
-                    <div class="content-row">
-                      <p>Total Late Entry: <span>
-                          <?php
-                          // Create connection
-                          include '../database.php';
-                          if ($conn->connect_error) {
-                            die("Connection failed: " . $conn->connect_error);
-                          }
-                          // Use prepared statements to prevent SQL injection
-                          if ($fromDate && $toDate) {
-                            $sql1 = "SELECT COUNT(*) as count FROM inqury_data WHERE `date` BETWEEN ? AND ? AND status='Late' AND dprt=?";
-                          } else {
-                            $sql1 = "SELECT COUNT(*) as count FROM inqury_data WHERE `date` = CURRENT_DATE AND status='Late' AND dprt=?";
-                          }
+                        // Prepare and bind the statement
+                        $stmt1 = $conn->prepare($sql1);
+                        if ($fromDate && $toDate) {
+                          $stmt1->bind_param("sss", $fromDate, $toDate, $department);
+                        } else {
+                          $stmt1->bind_param("s", $department);
+                        }
 
-                          // Prepare and bind the statement
-                          $stmt1 = $conn->prepare($sql1);
-                          if ($fromDate && $toDate) {
-                            $stmt1->bind_param("sss", $fromDate, $toDate, $department);
-                          } else {
-                            $stmt1->bind_param("s", $department);
-                          }
+                        // Execute the query
+                        $stmt1->execute();
 
-                          // Execute the query
-                          $stmt1->execute();
+                        // Bind the result variable
+                        $stmt1->bind_result($count);
 
-                          // Bind the result variable
-                          $stmt1->bind_result($count);
+                        // Fetch the result
+                        $stmt1->fetch();
 
-                          // Fetch the result
-                          $stmt1->fetch();
+                        // Output the result
+                        echo $count;
+                        $entryCount = $count;
+                        // Close the statement
+                        $stmt1->close();
 
-                          // Output the result
-                          echo $count;
-                          $entryCount = $count;
-                          // Close the statement
-                          $stmt1->close();
+                        // Close the connection
+                        $conn->close();
+                        ?>
+                      </span>
+                    </p>
+                    <p>Total Early Exit: <span>
+                        <?php
+                        // Create connection
+                        include '../database.php';
+                        if ($conn->connect_error) {
+                          die("Connection failed: " . $conn->connect_error);
+                        }
+                        //select only all student number whose status is late
+                        if ($fromDate && $toDate) {
+                          $sql1 = "SELECT COUNT(*) as count FROM inqury_data WHERE `date` BETWEEN ? AND ? AND status='Early' AND dprt=?";
+                        } else {
+                          $sql1 = "SELECT COUNT(*) as count FROM inqury_data WHERE `date` = CURRENT_DATE AND status='Early' AND dprt=?";
+                        }
 
-                          // Close the connection
-                          $conn->close();
-                          ?>
-                        </span>
-                      </p>
-                      <p>Total Early Exit: <span>
-                          <?php
-                          // Create connection
-                          include '../database.php';
-                          if ($conn->connect_error) {
-                            die("Connection failed: " . $conn->connect_error);
-                          }
-                          //select only all student number whose status is late
-                          if ($fromDate && $toDate) {
-                            $sql1 = "SELECT COUNT(*) as count FROM inqury_data WHERE `date` BETWEEN ? AND ? AND status='Early' AND dprt=?";
-                          } else {
-                            $sql1 = "SELECT COUNT(*) as count FROM inqury_data WHERE `date` = CURRENT_DATE AND status='Early' AND dprt=?";
-                          }
+                        // Prepare and bind the statement
+                        $stmt1 = $conn->prepare($sql1);
+                        if ($fromDate && $toDate) {
+                          $stmt1->bind_param("sss", $fromDate, $toDate, $department);
+                        } else {
+                          $stmt1->bind_param("s", $department);
+                        }
 
-                          // Prepare and bind the statement
-                          $stmt1 = $conn->prepare($sql1);
-                          if ($fromDate && $toDate) {
-                            $stmt1->bind_param("sss", $fromDate, $toDate, $department);
-                          } else {
-                            $stmt1->bind_param("s", $department);
-                          }
+                        // Execute the query
+                        $stmt1->execute();
 
-                          // Execute the query
-                          $stmt1->execute();
+                        // Bind the result variable
+                        $stmt1->bind_result($count);
 
-                          // Bind the result variable
-                          $stmt1->bind_result($count);
+                        // Fetch the result
+                        $stmt1->fetch();
 
-                          // Fetch the result
-                          $stmt1->fetch();
+                        // Output the result
+                        echo $count;
+                        // Close the statement
+                        $stmt1->close();
+                        $exitCount = $count;
+                        // Close the connection
+                        $conn->close();
+                        ?>
+                      </span>
+                    </p>
+                  </div>
+                  <div class="content-row">
+                    <p>Total Other Checking Count: <span>
+                        <?php
+                        // Create connection
+                        include '../database.php';
+                        if ($conn->connect_error) {
+                          die("Connection failed: " . $conn->connect_error);
+                        }
+                        //select only all student number whose status is late
+                        if ($fromDate && $toDate) {
+                          $sql1 = "SELECT COUNT(*) as count FROM inqury_data WHERE `date` BETWEEN ? AND ? AND status NOT IN ('Late', 'Early') AND dprt=?";
+                        } else {
+                          $sql1 = "SELECT COUNT(*) as count FROM inqury_data WHERE `date` = CURRENT_DATE AND status NOT IN ('Late', 'Early') AND dprt=?";
+                        }
 
-                          // Output the result
-                          echo $count;
-                          // Close the statement
-                          $stmt1->close();
-                          $exitCount = $count;
-                          // Close the connection
-                          $conn->close();
-                          ?>
-                        </span>
-                      </p>
-                    </div>
-                    <div class="content-row">
-                      <p>Total Other Checking Count: <span>
-                          <?php
-                          // Create connection
-                          include '../database.php';
-                          if ($conn->connect_error) {
-                            die("Connection failed: " . $conn->connect_error);
-                          }
-                          //select only all student number whose status is late
-                          if ($fromDate && $toDate) {
-                            $sql1 = "SELECT COUNT(*) as count FROM inqury_data WHERE `date` BETWEEN ? AND ? AND status NOT IN ('Late', 'Early') AND dprt=?";
-                          } else {
-                            $sql1 = "SELECT COUNT(*) as count FROM inqury_data WHERE `date` = CURRENT_DATE AND status NOT IN ('Late', 'Early') AND dprt=?";
-                          }
+                        // Prepare and bind the statement
+                        $stmt1 = $conn->prepare($sql1);
+                        if ($fromDate && $toDate) {
+                          $stmt1->bind_param("sss", $fromDate, $toDate, $department);
+                        } else {
+                          $stmt1->bind_param("s", $department);
+                        }
 
-                          // Prepare and bind the statement
-                          $stmt1 = $conn->prepare($sql1);
-                          if ($fromDate && $toDate) {
-                            $stmt1->bind_param("sss", $fromDate, $toDate, $department);
-                          } else {
-                            $stmt1->bind_param("s", $department);
-                          }
+                        // Execute the query
+                        $stmt1->execute();
 
-                          // Execute the query
-                          $stmt1->execute();
+                        // Bind the result variable
+                        $stmt1->bind_result($count);
 
-                          // Bind the result variable
-                          $stmt1->bind_result($count);
+                        // Fetch the result
+                        $stmt1->fetch();
 
-                          // Fetch the result
-                          $stmt1->fetch();
-
-                          // Output the result
-                          echo $count;
-                          // Close the statement
-                          $stmt1->close();
-                          $otherCount = $count;
-                          // Close the connection
-                          $conn->close();
-                          ?>
-                        </span>
-                      </p>
-                    </div>
+                        // Output the result
+                        echo $count;
+                        // Close the statement
+                        $stmt1->close();
+                        $otherCount = $count;
+                        // Close the connection
+                        $conn->close();
+                        ?>
+                      </span>
+                    </p>
                   </div>
                 </div>
-                <div class="pie-chart">
-                  <canvas id="<?php echo $department ?>" width="300" height="300"></canvas>
-                  <script>
-                    // Get the counts from your PHP code
-                    var lateEntryCount = <?php echo $entryCount; ?>;
-                    var earlyExitCount = <?php echo $exitCount; ?>;
-                    var otherCount = <?php echo $otherCount; ?>;
+              </div>
+              <div class="pie-chart">
+                <canvas id="<?php echo $department ?>" width="300" height="300"></canvas>
+                <script>
+                  // Get the counts from your PHP code
+                  var lateEntryCount = <?php echo $entryCount; ?>;
+                  var earlyExitCount = <?php echo $exitCount; ?>;
+                  var otherCount = <?php echo $otherCount; ?>;
 
-                    // Get the canvas element
-                    var ctx1 = document.getElementById("<?php echo $department ?>").getContext("2d");
+                  // Get the canvas element
+                  var ctx1 = document.getElementById("<?php echo $department ?>").getContext("2d");
 
-                    // Create a pie chart
-                    var myPieChart = new Chart(ctx1, {
-                      type: "doughnut",
-                      data: {
-                        labels: ["Late Entry", "Early Exit", "Other Reason"],
-                        datasets: [{
-                          data: [lateEntryCount, earlyExitCount, otherCount],
-                          backgroundColor: ['#ef233c', '#ccd5ae', '#0C356A'],
-                        }],
+                  // Create a pie chart
+                  var myPieChart = new Chart(ctx1, {
+                    type: "doughnut",
+                    data: {
+                      labels: ["Late Entry", "Early Exit", "Other Reason"],
+                      datasets: [{
+                        data: [lateEntryCount, earlyExitCount, otherCount],
+                        backgroundColor: ['#ef233c', '#ccd5ae', '#0C356A'],
+                      }],
+                    },
+                    options: {
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      legend: {
+                        position: "bottom",
                       },
-                      options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        legend: {
-                          position: "bottom",
-                        },
-                      },
-                    });
-                  </script>
-                </div>
-                <div class="see-more">
-                  <a href="../seemore/seemore.php?id=<?php echo $department; ?>">See More</a>
+                    },
+                  });
+                </script>
+              </div>
+              <div class="see-more">
+                <!-- <form action="../seemore/seemore.php" method="post" id="seemoreForm">
+                  <input type="hidden" name="department" value="<?php //echo $department; ?>">
+                  <input type="hidden" name="fromDate" value="<?php //echo $fromDate; ?>">
+                  <input type="hidden" name="toDate" value="<?php //echo $toDate; ?>">
+                  <a href="javascript:void(0);" onclick="document.getElementById('seemoreForm').submit();">See More</a>
+                </form> -->
+                <a href="../seemore/seemore.php?id=<?php echo $department; ?>&fromDate=<?php echo $fromDate; ?>&toDate=<?php echo $toDate; ?>">See
+                    More</a>
                 </div>
               </div>
-              <?php
-            } ?>
-          </div>
+            <?php
+          } ?>
+        </div>
       </div>
       <!-- Main Content Ends Here -->
     </div>

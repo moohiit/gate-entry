@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['role'])) {
+  header("Location: ../index.php");
+  exit();
+}
 include '../database.php';
 ?>
 <!DOCTYPE html>
@@ -72,7 +76,7 @@ include '../database.php';
           <span class="text nav-text">Send Report</span>
         </a>
       </li>
-    
+
       <li class="log_out nav-link">
         <a href="../logout.php">
           <i class='bx bx-log-out bx-fade-left-hover'></i>
@@ -97,13 +101,12 @@ include '../database.php';
         $department = null;
         if (isset($_GET['id'])) {
           $department = $_GET['id'];
-          $fromDate = $_SESSION["fromDate"] ?? null;
-          // unset($_SESSION['fromDate']);
-          $_SESSION['from'] = $fromDate;
-          $toDate = $_SESSION["toDate"] ?? null;
-          // unset($_SESSION['toDate']);
-          $_SESSION['to'] = $toDate;
+          $fromDate = $_GET["fromDate"] ?? null;
+          $toDate = $_GET["toDate"] ?? null;
         }
+        // $department = $_POST['department'] ?? null;
+        // $fromDate = $_POST['fromDate'] ?? null;
+        // $toDate = $_POST['toDate'] ?? null;
         ?>
         <div class="heading">
           <h1>
@@ -149,13 +152,16 @@ include '../database.php';
                   <!-- <td>
                     <?php //echo $i ?>
                   </td>-->
-                  <td> 
+                  <td>
                     <?php
                     $id = $row['student_id'];
                     echo $row["student_id"] ?>
                   </td>
                   <td>
-                    <a href="studentDetails.php?id=<?php echo $id ?>" style="color:blue;"><?php echo $row['name'] ?></a>
+                    <a href="studentDetails.php?id=<?php echo $id ?>&fromDate=<?php echo $fromDate; ?>&toDate=<?php echo $toDate; ?>"
+                      style="color:blue;">
+                      <?php echo $row['name'] ?>
+                    </a>
                   </td>
                   <td>
                     <?php echo $row["department"] ?>

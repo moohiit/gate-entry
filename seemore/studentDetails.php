@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['role'])) {
+  header("Location: ../index.php");
+  exit();
+}
 include '../database.php';
 ?>
 <!DOCTYPE html>
@@ -96,10 +100,8 @@ include '../database.php';
         <?php
         if (isset($_GET['id'])) {
           $id = $_GET['id'];
-          $fromDate = $_SESSION["from"] ?? null;
-          // unset($_SESSION['from']);
-          $toDate = $_SESSION["to"] ?? null;
-          // unset($_SESSION['to']);
+          $fromDate = $_GET["fromDate"] ?? null;
+          $toDate = $_GET["toDate"] ?? null;
         }
         ?>
         <div class="heading">
@@ -107,28 +109,60 @@ include '../database.php';
             Student Report
           </h1>
         </div>
+        <div class="form-container">
+          <?php
+          $sql = "SELECT * from student where id='{$id}'";
+          $result = mysqli_query($conn, $sql);
+          while ($row = mysqli_fetch_assoc($result)) {
+            $student_id = $row['id'];
+            $photo = $row['photo_url'];
+            ?>
+            <form class="form">
+              <h2 class="form-heading">Student Details</h2>
+              <div>
+                <img class="table-image" src="<?php echo $photo; ?>" alt="Photo">
+              </div>
+              <div>
+                <div class="form-row">
+                  <label for="name">Name:</label>
+                  <p><?php echo strtoupper($row["name"]); ?></p>
+                </div>
+                <div class="form-row">
+                  <label for="dprt">Department:</label>
+                  <p><?php echo strtoupper($row['department']); ?></p>
+                </div>
+                <div class="form-row">
+                  <label for="year">Year:</label>
+                  <p><?php echo strtoupper($row['year']); ?></p>
+                </div>
+                <div class="form-row">
+                  <label for="num">Number:</label>
+                  <p><?php echo $row['conumber']; ?></p>
+                </div>
+              </div>
+            </form>
+          <?php } ?>
+        </div>
         <div class="table">
           <table>
             <thead>
               <tr>
                 <th>Sr.No</th>
-                <th>Name</th>
-                <th>Department</th>
-                <th>Year</th>
-                <th>Contact No.</th>
+                <th>Status</th>
                 <th>Reason</th>
-                <th>Photo</th>
+                <th>Date</th>
+                <th>Time</th>
               </tr>
             </thead>
             <tbody>
               <?php
               // Use prepared statements to prevent SQL injection
               if ($fromDate && $toDate) {
-                $sql1 = "SELECT student_id, name, dprt AS department, year, contact, reason, photo_url FROM inqury_data WHERE `date` BETWEEN ? AND ? AND student_id=?";
+                $sql1 = "SELECT status, reason, date, currentime FROM inqury_data WHERE `date` BETWEEN ? AND ? AND student_id=?";
                 $stmt1 = $conn->prepare($sql1);
                 $stmt1->bind_param("sss", $fromDate, $toDate, $id);
               } else if ($fromDate == null && $toDate == null) {
-                $sql1 = "SELECT student_id, name, dprt AS department, year, contact, reason, photo_url FROM inqury_data WHERE month(`date`) = month(CURRENT_DATE) AND student_id=?";
+                $sql1 = "SELECT status, reason, date, currentime FROM inqury_data WHERE month(`date`) = month(CURRENT_DATE) AND student_id=?";
                 $stmt1 = $conn->prepare($sql1);
                 $stmt1->bind_param("s", $id);
               }
@@ -146,21 +180,22 @@ include '../database.php';
                     <?php echo $i ?>
                   </td>
                   <td>
-                    <?php echo $row['name'] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["department"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["year"] ?>
-                  </td>
-                  <td>
-                    <?php echo $row["contact"] ?>
+                    <?php if($row["status"]=="Late"){
+                      echo "Late Entry";
+                    }elseif($row["status"]=="Early"){
+                      echo "Early Exit";
+                    } else {
+                      echo $row["status"];} ?>
                   </td>
                   <td>
                     <?php echo $row["reason"] ?>
                   </td>
-                  <td><img class="table-image" src="<?php echo $row["photo_url"] ?>" alt="Photo"></td>
+                  <td>
+                    <?php echo $row["date"] ?>
+                  </td>
+                  <td>
+                    <?php echo $row["currentime"] ?>
+                  </td>
                 </tr>
                 <?php
                 $i++;

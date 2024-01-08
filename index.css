@@ -1,132 +1,147 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
-*{
+body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-html,body{
-  display: grid;
-  height: 100%;
-  width: 100%;
-  place-items: center;
-  background: -webkit-linear-gradient(left, #fff, #004080, #004080, #fff);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  font-family: 'Arial', sans-serif;
 }
 
-.full-body {
-  display: grid;
-  height: 100vh;
-  width: 100%;
-  place-items: center;
-  background-image: url(./gate1.png);
-  background-repeat: no-repeat;
-  background-size: inherit;
-  background-position: center;
-  /* Add the blur effect */
-  /* filter: blur(8px);
-  -webkit-filter: blur(8px); */
-}
-
-::selection{
-  background: #1a75ff;
-  color: #fff;
-}
-.wrapper {
-    margin-top: 40px;
-    position: absolute;
-    top: 20%;
-    overflow: hidden;
-    min-width: 40%;
-    min-height: 300px;
-    background: #fff;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
-}
-.wrapper .title-text{
+.login-container {
+  position: relative;
   display: flex;
-  justify-content: center;/* Center the login title */
-  background: -webkit-linear-gradient(right, #003366, #004080, #0059b3, #0073e6);
-  border-radius: 15px;
-  color: #fff;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
-.wrapper .title{
-  font-size: 30px;
-  font-weight: 400;
-  padding: 10px;
-  text-align: center;
-  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
-}
-.form-container{
-  width: 100%;
-  overflow: hidden;
-}
-.form-inner form{
-  width: 100%; /* Make the form full width */
-  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
-}
-.form-inner form .field{
-  height: 50px;
-  width: 100%;
-  margin-top: 20px;
-}
-.form-inner form .field input{
-  height: 100%;
-  width: 100%;
-  outline: none;
-  padding-left: 15px;
-  border-radius: 15px;
-  border: 1px solid lightgrey;
-  border-bottom-width: 2px;
-  font-size: 17px;
-  transition: all 0.3s ease;
-}
-.form-inner form .field input:focus{
-  border-color: #1a75ff;
-}
-.form-inner form .field input::placeholder{
-  color: #999;
-  transition: all 0.3s ease;
-}
-form .field input:focus::placeholder{
-  color: #1a75ff;
-}
-.form-inner form .btn{
-  height: 50px;
-  width: 100%;
-  border-radius: 15px;
-  position: relative;
-  overflow: hidden;
-}
-.form-inner form .btn .btn-layer{
-  height: 100%;
-  width: 300%;
+
+.login-container::before {
+  content: '';
   position: absolute;
-  left: -100%;
-  background: -webkit-linear-gradient(right, #003366, #004080, #0059b3, #0073e6);
-  border-radius: 15px;
-  transition: all 0.4s ease;
-}
-.form-inner form .btn:hover .btn-layer{
+  top: 0;
   left: 0;
-}
-.form-inner form .btn input[type="submit"]{
-  height: 100%;
   width: 100%;
-  z-index: 1;
-  position: relative;
-  background: none;
+  height: 100%;
+  background-image: url('gate_desk.png');
+  filter: blur(2px);
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+}
+
+.login-form {
+    position: relative;
+    background: rgba(255,255,255,.2);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+/* ... rest of your styles ... */
+
+
+.login-form h1 {
+  margin-bottom: 20px;
+  color: darkblue; /* Dark blue text color */
+  font-size: 2.5rem; /* Increased font size */
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.5rem;
+  color: #f5f5f5; /* Medium grey text color */
+}
+
+.login-form input {
+  width: 100%;
+  background: #a5d3e588; /* Light grey background color */
+  padding: 15px;
+  color: #f5f5f5;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  border: 1px solid #a5d3e588; /* Light grey border */
+  border-radius: 10px;
+  font-size: 16px;
+}
+.login-form input::placeholder{
+  color: #d4c6e6;
+}
+
+.login-form button {
+  background-color: #0C356A;
+  color: white;
+  padding: 15px 30px;
   border: none;
-  color: #fff;
-  padding-left: 0;
-  border-radius: 15px;
-  font-size: 20px;
-  font-weight: 500;
+  border-radius: 10px;
   cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
 }
-.alert{
+
+.login-form button:hover {
+  background-color: darkblue; /* Darker green on hover */
+}
+footer {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  background: #0c356ab4;
+  color: #f5f5f5;
+  height: fit-content;
+  width: 100%;
+  z-index: 100;
+  padding: 0 5px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  transition: all 0.5s ease;
 }
+
+footer p {
+  font-size: 0.6rem;
+  margin-top: 3px;
+  margin-bottom: 0px;
+  padding: 3px;
+}
+
+ul {
+  list-style: none; /* Remove default list styling */
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  font-size: 0.8rem;
+  display: inline-block; /* Display list items in the same row */
+  margin-right: 15px; /* Adjust spacing between items */
+}
+
+a {
+  text-decoration: none; /* Remove default underline */
+  color: white; /* Set text color to white */
+}
+
+a:hover{
+  color: #14af8d;
+}
+
+i {
+  margin-right: 5px; /* Adjust spacing between icon and text */
+}
+
+
+@media (max-width: 768px) {
+  .login-form {
+    width: 70%;
+    min-height: 350px;
+    position: absolute;
+    top: 10%;
+  }
+  .login-container::before {
+    background-image: url("./gate_mobile.png");
+  }
+}
+

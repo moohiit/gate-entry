@@ -109,16 +109,18 @@ textarea {
 }
 
 .btn {
-    display: block;
-    margin: 0 auto;
-    /* padding: 10px 20px; */
-    background-color: #0C356A;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
+  display: block;
+  margin: 0 auto;
+  /* padding: 10px 20px; */
+  background-color: #0c356a;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-inline: 35px;
 }
+
 
 /* Styling for the "See More" link */
 .see-more {

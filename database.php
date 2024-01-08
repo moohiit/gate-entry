@@ -1,7 +1,7 @@
 <?php
 $host = "localhost";
-$dbname = "gate";
 $username = "root";
 $password = "";
+$dbname = "gate";
 $conn=mysqli_connect("localhost","root","","gate");
 ?>

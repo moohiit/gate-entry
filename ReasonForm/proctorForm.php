@@ -1,6 +1,10 @@
 <?php
 ob_start();
 session_start();
+if (!isset($_SESSION['role'])) {
+  header("Location: ../index.php");
+  exit();
+}
 include '../database.php';
 if (isset($_GET['id'])) {
   $id = $_GET['id'];
