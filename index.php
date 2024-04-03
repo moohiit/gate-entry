@@ -3,6 +3,7 @@ session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,14 +20,35 @@ session_start();
       <?php if (isset($_SESSION['loginError'])) {
         $error = $_SESSION['loginError'];
         echo '<p style="color: red;">' . $error . '</p>';
-      }?>
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" placeholder="Enter your username">
+      } ?>
+      <!-- <label for="username">Username:</label> -->
+      <input type="text" id="username" name="username" placeholder="Username">
 
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" placeholder="Enter your password">
+      <!-- <label for="password">Password:</label> -->
+      <input type="password" id="password" name="password" placeholder="Password">
 
+      <div class="role-row">
+        <div class="column">
+          <label for="admin">Admin</label>
+          <input type="radio" name="role" id="admin" class="role" value="admin" required>
+        </div>
+        <div class="column"><label for="hod">HOD</label>
+          <input type="radio" name="role" id="hod" class="role" value="hod" required>
+        </div>
+        <div class="column"><label for="faculty">Faculty</label>
+          <input type="radio" name="role" id="faculty" class="role" value="faculty" required>
+        </div>
+        <div class="column"><label for="student">Student</label>
+          <input type="radio" name="role" id="student" class="role" value="student" required>
+        </div>
+      </div>
       <button type="submit">Login</button>
+      <!-- Forgot Password and Signup Links -->
+      <div style="margin-top: 5px;">
+        <a class="forget-password" href="forgotPassword.php" >Forgot Password?</a>
+        <span style="color: #104891;" >|</span>
+        <a class="signup-button" href="signup.php" ">Sign Up</a>
+      </div>
     </form>
   </div>
   <footer>
@@ -40,4 +62,5 @@ session_start();
     </p>
   </footer>
 </body>
+
 </html>
