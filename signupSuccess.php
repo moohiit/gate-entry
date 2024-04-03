@@ -16,7 +16,7 @@ unset($_SESSION['loginError']);
     <h2 style="color: #09ff00;">User Registration Successful</h2>
     <p>Your account created successfully. You can now <a
         style="font-size: larger; text-decoration: none; color:darkblue;" href="index.php">login</a> with your login credentials.</p>
-    <button><a style="font-size: larger; text-decoration: none;" href="index.php">login</a></button>
+    <a id="login-link" style="font-size: larger; text-decoration: none;" href="index.php">login</a>
   </div>
   <footer>
     <p>&copy; Gate Entry System <br> Developed by Mohit Patel and Raman Goyal</p>
