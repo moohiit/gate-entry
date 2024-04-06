@@ -32,18 +32,22 @@ if ($stmt->num_rows == 1) {
   $_SESSION['username'] = $username;
   $_SESSION['role'] = $role;
 
-  if ($status=='active') {
+  if ($status == 'active') {
     // Redirect based on user's role
     if ($role == 'admin') {
       header('Location: ./dashboard/dashboard.php'); // Adjust the path accordingly
-    } else {
+    } else if ($role == 'hod') {
+      header('Location: ./dashboard/dashboard.php');
+    } else if ($role == 'gatekeeper') {
       header('Location: ./Search/search.php');
+    } else if ($role == 'student') {
+      header("Location: ./studentSection/studentProfile.php?id=$username");
     }
-    }else{
-        // Invalid login, set an error message and redirect back to the login page
-        $_SESSION['loginError'] = "Your account is not activated. <br/> Please contact Administrator";
-        header('Location: index.php');
-    }
+  } else {
+    // Invalid login, set an error message and redirect back to the login page
+    $_SESSION['loginError'] = "Your account is not activated. <br/> Please contact Administrator";
+    header('Location: index.php');
+  }
 } else {
   // Invalid login, set an error message and redirect back to the login page
   $_SESSION['loginError'] = "Invalid username or password.";

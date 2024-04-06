@@ -35,7 +35,7 @@ if ($conn->connect_error) {
     <ul class="nav-links">
       <?php
       // Check if the user is an admin
-      if ($_SESSION['role'] == 'admin') {
+      if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'hod') {
         ?>
         <li class="nav-link">
           <a href="../dashboard/dashboard.php">
@@ -50,12 +50,16 @@ if ($conn->connect_error) {
           <span class="text nav-text">Search Student</span>
         </a>
       </li>
-      <li class="nav-link">
-        <a href="../addStudent/addStudent.php">
-          <i class="bx bx-user-plus icon"></i>
-          <span class="text nav-text">Add Student</span>
-        </a>
-      </li>
+      <?php
+      if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'hod') {
+        ?>
+        <li class="nav-link">
+          <a href="../addStudent/addStudent.php">
+            <i class="bx bx-user-plus icon"></i>
+            <span class="text nav-text">Add Student</span>
+          </a>
+        </li>
+      <?php } ?>
       <?php
       // Check if the user is an admin
       if ($_SESSION['role'] == 'admin') {
@@ -66,20 +70,20 @@ if ($conn->connect_error) {
             <span class="text nav-text">Analytics</span>
           </a>
         </li>
+    
+        <li class="nav-link">
+          <a href="../Visitor/Visitor.php">
+            <i class='bx bx-group icon'></i>
+            <span class="text nav-text">Visitor Section</span>
+          </a>
+        </li>
+        <li class="nav-link">
+          <a href="../mail/mail.php">
+            <i class="bx bx-mail-send icon"></i>
+            <span class="text nav-text">Send Report</span>
+          </a>
+        </li>
       <?php } ?>
-      <li class="nav-link">
-        <a href="../Visitor/Visitor.php">
-          <i class='bx bx-group icon'></i>
-          <span class="text nav-text">Visitor Section</span>
-        </a>
-      </li>
-      <li class="nav-link">
-        <a href="../mail/mail.php">
-          <i class="bx bx-mail-send icon"></i>
-          <span class="text nav-text">Send Report</span>
-        </a>
-      </li>
-
       <li class="log_out nav-link">
         <a href="../logout.php">
           <i class='bx bx-log-out bx-fade-left-hover'></i>
@@ -175,7 +179,10 @@ if ($conn->connect_error) {
                     <?php echo $i ?>
                   </td>
                   <td>
-                    <?php echo $row["name"]; ?>
+                    <a href="../studentDetails.php?id=<?php echo $row['student_id'] ?>&fromDate=<?php echo $fromDate; ?>&toDate=<?php echo $toDate; ?>"
+                      style="color:blue;">
+                      <?php echo $row['name'] ?>
+                    </a>
                   </td>
                   <td>
                     <?php echo $row["dprt"] ?>

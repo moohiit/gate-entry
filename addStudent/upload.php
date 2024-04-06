@@ -51,16 +51,32 @@ if (isset($_POST["submit"])) {
 
       // Assuming you have form fields for name, department, year, and mobile
       $name = $_POST['name'];
+      $email = $_POST['email'];
       $department = $_POST['dprt'];
       $year = $_POST['year'];
       $mobile = $_POST['mobile'];
+      $role = 'student';
+      $password = $_POST['mobile'];
 
       // SQL query to insert data into the "student" table
-      $sql = "INSERT INTO student (name, department, year, conumber, photo_url) VALUES ('$name', '$department', '$year', '$mobile', '$imageUrl')";
+      $sqlStudent = "INSERT INTO student (name, email, department, year, conumber, photo_url) VALUES ('$name','$email', '$department', '$year', '$mobile', '$imageUrl')";
+
+      // Check if student already exists
+      $check_query = "SELECT * FROM users WHERE username='$email'";
+      $result = mysqli_query($conn, $check_query);
+      if (mysqli_num_rows($result) > 0) {
+        $_SESSION["status"] = "Error: User already exists!";
+        header("Location:addStudent.php "); // Redirect back to signup page
+        exit();
+      }
+
+      // Create SQL query to insert data into the users table
+      $sqlUsers = "INSERT INTO users (fullname, username, mobile, role,department, password) VALUES ('$name', '$email', '$mobile', '$role', '$department', '$password')";
 
       // Execute the query
-      $queryResult = $conn->query($sql);
-      if ($queryResult === TRUE) {
+      $queryStudent = $conn->query($sqlStudent);
+      $queryUsers = $conn->query($sqlUsers);
+      if ($queryStudent === TRUE && $queryUsers === True) {
         $_SESSION['success'] = "Image uploaded successfully and data saved in the database.";
         // Redirect to success page or handle as needed
         header("Location: success.php");

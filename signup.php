@@ -10,6 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $email = $_POST["email"];
   $mobile = $_POST["mobile"];
   $role = $_POST["role"];
+  $department = $_POST["department"];
   $password = $_POST["password"];
 
   // Check if user already exists
@@ -22,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 
   // Create SQL query to insert data into the users table
-  $sql = "INSERT INTO users (fullname, username, mobile, role, password) VALUES ('$name', '$email', '$mobile', '$role', '$password')";
+  $sql = "INSERT INTO users (fullname, username, mobile, role,department, password) VALUES ('$name', '$email', '$mobile', '$role', '$department', '$password')";
 
   if (mysqli_query($conn, $sql)) {
     // Redirect to a success page
@@ -51,11 +52,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form method="post" class="signup-form">
       <h2>Sign Up</h2>
       <?php
-        if(isset($_SESSION["signupError"])){
-          ?>
-          <h4 style="color: red;"><?php echo $_SESSION["signupError"];?></h4>
-          <?php
-        }
+      if (isset($_SESSION["signupError"])) {
+        ?>
+        <h4 style="color: red;">
+          <?php echo $_SESSION["signupError"]; ?>
+        </h4>
+        <?php
+      }
       ?>
       <input type="text" name="name" placeholder="Full Name" required>
       <input type="email" name="email" placeholder="Email" required>
@@ -65,6 +68,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <option value="faculty">Faculty</option>
         <option value="hod">Head of Department</option>
         <option value="admin">Admin</option>
+      </select>
+      <select name="department" required>
+        <option value="select">Select Department</option>
+        <?php
+        $sql = "SELECT * from department";
+        $result = mysqli_query($conn, $sql);
+        while ($row = mysqli_fetch_assoc($result)) {
+          ?>
+          <option value="<?php echo $row["department"] ?>">
+            <?php echo $row["department"] ?>
+          </option>
+          <?php
+        }
+        ?>
       </select>
       <input type="password" name="password" placeholder="Password" required>
       <button type="submit">Sign Up</button>

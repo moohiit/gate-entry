@@ -38,7 +38,7 @@
 
 input, textarea, select {
     flex: 2;
-    padding: 10px;
+    padding: 5px;
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 5px;

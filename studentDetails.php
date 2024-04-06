@@ -4,7 +4,7 @@ if (!isset($_SESSION['role'])) {
   header("Location: ../index.php");
   exit();
 }
-include '../database.php';
+include './database.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -17,7 +17,7 @@ include '../database.php';
   <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" type="text/css"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="seemore.css">
+  <link rel="stylesheet" href="studentDetails.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gate Entry System</title>
   <link rel="stylesheet" href="../styles.css">
@@ -121,7 +121,7 @@ include '../database.php';
             $student_id = $row['id'];
             $photo = $row['photo_url'];
             ?>
-            <form class="form">
+            <form class="student-form">
               <h2 class="form-heading">Student Details</h2>
               <div>
                 <img class="table-image" src="<?php echo $photo; ?>" alt="Photo">

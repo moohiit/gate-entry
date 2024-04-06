@@ -32,7 +32,7 @@ include '../database.php';
     <ul class="nav-links">
       <?php
       // Check if the user is an admin
-      if ($_SESSION['role'] == 'admin') {
+      if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'hod') {
         ?>
         <li class="nav-link">
           <a href="../dashboard/dashboard.php">
@@ -47,12 +47,27 @@ include '../database.php';
           <span class="text nav-text">Search Student</span>
         </a>
       </li>
-      <li class="nav-link">
-        <a href="../addStudent/addStudent.php">
-          <i class="bx bx-user-plus icon"></i>
-          <span class="text nav-text">Add Student</span>
-        </a>
-      </li>
+      <?php
+      if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'hod') {
+        ?>
+        <li class="nav-link">
+          <a href="../addStudent/addStudent.php">
+            <i class="bx bx-user-plus icon"></i>
+            <span class="text nav-text">Add Student</span>
+          </a>
+        </li>
+      <?php } ?>
+      <?php
+      // Check if the user is an hod
+      if ($_SESSION['role'] == 'hod') {
+        ?>
+        <li class="nav-link">
+          <a href="../Analytics/analyticshod.php">
+            <i class="bx bx-bar-chart icon"></i>
+            <span class="text nav-text">Analytics</span>
+          </a>
+        </li>
+      <?php } ?>
       <?php
       // Check if the user is an admin
       if ($_SESSION['role'] == 'admin') {
@@ -63,20 +78,20 @@ include '../database.php';
             <span class="text nav-text">Analytics</span>
           </a>
         </li>
+    
+        <li class="nav-link">
+          <a href="../Visitor/Visitor.php">
+            <i class='bx bx-group icon'></i>
+            <span class="text nav-text">Visitor Section</span>
+          </a>
+        </li>
+        <li class="nav-link">
+          <a href="../mail/mail.php">
+            <i class="bx bx-mail-send icon"></i>
+            <span class="text nav-text">Send Report</span>
+          </a>
+        </li>
       <?php } ?>
-      <li class="nav-link">
-        <a href="../Visitor/Visitor.php">
-          <i class='bx bx-group icon'></i>
-          <span class="text nav-text">Visitor Section</span>
-        </a>
-      </li>
-      <li class="nav-link">
-        <a href="../mail/mail.php">
-          <i class="bx bx-mail-send icon"></i>
-          <span class="text nav-text">Send Report</span>
-        </a>
-      </li>
-
       <li class="log_out nav-link">
         <a href="../logout.php">
           <i class='bx bx-log-out bx-fade-left-hover'></i>
@@ -99,7 +114,7 @@ include '../database.php';
       <div class="main-content">
         <?php
         // Check if the user is an admin
-        if ($_SESSION['role'] !== 'admin') {
+        if ($_SESSION['role'] !== 'admin' && $_SESSION['role'] !== 'hod') {
           ?>
           <div class=access-denied>
             <?php
@@ -128,6 +143,10 @@ include '../database.php';
               <div class="form-row">
                 <label for="name">Name</label>
                 <input type="text" name="name">
+              </div>
+              <div class="form-row">
+                <label for="email">Email</label>
+                <input type="text" name="email">
               </div>
               <div class="form-row">
                 <label for="dprt">Department</label>

@@ -54,6 +54,12 @@
   border: 2px solid rgb(244, 248, 5);
   height: 160px;
 }
+.card-container .card:nth-child(5) {
+  background: linear-gradient(to right, #86ffb8 0%, rgb(0, 255, 55) 100%);
+  /* color: rgb(18, 69, 165); */
+  border: 2px solid rgb(5, 248, 236);
+  height: 160px;
+}
 
 
 .card-container .card a {
@@ -68,7 +74,10 @@
   line-height: 2.5rem;
   margin-bottom: 0.1rem;
 }
-
+.user-count{
+  font-size: 20px;
+  color: rgb(51, 133, 93);
+}
 .nav-links .nav-link a[href*="../dashboard/dashboard.php"] {
   border: white 2px solid;
   border-radius: 5px;

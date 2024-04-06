@@ -5,6 +5,9 @@ if (!isset($_SESSION['role'])) {
   exit();
 }
 include '../database.php';
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -17,7 +20,7 @@ include '../database.php';
   <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" type="text/css"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="seemore.css">
+  <link rel="stylesheet" href="manageUsers.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gate Entry System</title>
   <link rel="stylesheet" href="../styles.css">
@@ -94,88 +97,68 @@ include '../database.php';
     <nav>
       <div class="sidebar-button">
         <i class='bx bx-menu sidebarBtn'></i>
-        <span class="dashboard">Gate Entry System</span>
+        <span class="dashboard">User Management</span>
       </div>
     </nav>
     <!-- Navbar ends Here -->
     <div class="home-content">
       <!-- Main Content Goes Here   -->
       <div class="main-content">
-        <?php
-        if (isset($_GET['id'])) {
-          $id = $_GET['id'];
-          $fromDate = $_GET["fromDate"] ?? null;
-          $toDate = $_GET["toDate"] ?? null;
-        }
-        ?>
         <div class="heading">
-          <h1>
-            Student Report
-          </h1>
-        </div>
-        <div class="form-container">
-          <?php
-          $sql = "SELECT * from student where id='{$id}'";
-          $result = mysqli_query($conn, $sql);
-          while ($row = mysqli_fetch_assoc($result)) {
-            $student_id = $row['id'];
-            $photo = $row['photo_url'];
-            ?>
-            <form class="form">
-              <h2 class="form-heading">Student Details</h2>
-              <div>
-                <img class="table-image" src="<?php echo $photo; ?>" alt="Photo">
-              </div>
-              <div>
-                <div class="form-row">
-                  <label for="name">Name:</label>
-                  <p><?php echo strtoupper($row["name"]); ?></p>
-                </div>
-                <div class="form-row">
-                  <label for="dprt">Department:</label>
-                  <p><?php echo strtoupper($row['department']); ?></p>
-                </div>
-                <div class="form-row">
-                  <label for="year">Year:</label>
-                  <p><?php echo strtoupper($row['year']); ?></p>
-                </div>
-                <div class="form-row">
-                  <label for="num">Number:</label>
-                  <p><?php echo $row['conumber']; ?></p>
-                </div>
-              </div>
-            </form>
-          <?php } ?>
+          <h1>Manage Users</h1>
         </div>
         <div class="table">
+          <form class="form" method="post">
+            <div class="form-row">
+              <label for="dprt">Department:</label>
+              <select name="dprt">
+                <option value="select">Select Department</option>
+                <?php
+                $sql = "SELECT * from department";
+                $result = mysqli_query($conn, $sql);
+                while ($row = mysqli_fetch_assoc($result)) {
+                  ?>
+                  <option value="<?php echo $row["department"] ?>">
+                    <?php echo $row["department"] ?>
+                  </option>
+                  <?php
+                }
+                ?>
+              </select>
+            </div>
+            <div class="form-row">
+              <input type="submit" class="btn" name="btn">
+            </div>
+          </form>
           <table>
             <thead>
               <tr>
                 <th>Sr.No</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Role</th>
+                <th>Department</th>
                 <th>Status</th>
-                <th>Reason</th>
-                <th>Date</th>
-                <th>Time</th>
+                <th>Change Status</th>
+                <th>Action</th>
               </tr>
+
             </thead>
             <tbody>
               <?php
-              // Use prepared statements to prevent SQL injection
-              if ($fromDate && $toDate) {
-                $sql1 = "SELECT status, reason, date, currentime FROM inqury_data WHERE `date` BETWEEN ? AND ? AND student_id=?";
-                $stmt1 = $conn->prepare($sql1);
-                $stmt1->bind_param("sss", $fromDate, $toDate, $id);
-              } else if ($fromDate == null && $toDate == null) {
-                $sql1 = "SELECT status, reason, date, currentime FROM inqury_data WHERE month(`date`) = month(CURRENT_DATE) AND student_id=?";
-                $stmt1 = $conn->prepare($sql1);
-                $stmt1->bind_param("s", $id);
+              //Initialize Department
+              $department = null;
+              if (isset($_POST["btn"])) {
+                $department = $_POST['dprt'] ?? null;
               }
-
-              // Execute the query
-              $stmt1->execute();
-
-              // Get the result set
-              $result = $stmt1->get_result();
+              // Use prepared statements to prevent SQL injection
+              if ($department) {
+                $sql = "SELECT fullname, username, mobile, role, department, status FROM users where department='$department'";
+              } else {
+                $sql = "SELECT fullname, username, mobile, role, department, status FROM users";
+              }
+              $result = mysqli_query($conn, $sql);
               $i = 1;
               while ($row = mysqli_fetch_assoc($result)) {
                 ?>
@@ -184,36 +167,42 @@ include '../database.php';
                     <?php echo $i ?>
                   </td>
                   <td>
-                    <?php if($row["status"]=="Late"){
-                      echo "Late Entry";
-                    }elseif($row["status"]=="Early"){
-                      echo "Early Exit";
-                    } else {
-                      echo $row["status"];} ?>
+                    <?php echo $row["fullname"]; ?>
                   </td>
                   <td>
-                    <?php echo $row["reason"] ?>
+                    <?php echo $row["username"] ?>
                   </td>
                   <td>
-                    <?php echo $row["date"] ?>
+                    <?php echo $row["mobile"] ?>
                   </td>
                   <td>
-                    <?php echo $row["currentime"] ?>
+                    <?php echo $row["role"] ?>
+                  </td>
+                  <td>
+                    <?php echo $row["department"] ?>
+                  </td>
+                  <td>
+                    <?php echo $row["status"] ?>
+                  </td>
+                  <td>
+                    <select onchange="updateStatus(this.value, '<?php echo $row['username']; ?>')">
+                      <option value="active" <?php if ($row['status'] == 'active')
+                        echo 'selected'; ?>>Active</option>
+                      <option value="inactive" <?php if ($row['status'] == 'inactive')
+                        echo 'selected'; ?>>Inactive</option>
+                    </select>
+                  </td>
+                  <td>
+                    <center><button id="table-button"
+                        onclick="confirmDelete('<?php echo $row['username']; ?>')">Delete</button></center>
                   </td>
                 </tr>
                 <?php
                 $i++;
-              }
-
-              // Close the statement
-              $stmt1->close();
-              // Close the connection
-              $conn->close();
-              ?>
+              } ?>
             </tbody>
-          </table>
+            </>
         </div>
-
       </div>
       <!-- Main Content Ends Here -->
     </div>
@@ -221,7 +210,37 @@ include '../database.php';
       <p>&copy; Gate Entry System <br> Developed by Mohit Patel and Raman Goyal</p>
     </footer>
   </section>
+  <script>
+    function updateStatus(status, username) {
+      // Send an AJAX request to update the status
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          // Reload the page after updating the status
+          window.location.reload();
+        }
+      };
+      xhttp.open("POST", "updateStatus.php", true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.send("status=" + status + "&username=" + username);
+    }
+    function confirmDelete(username) {
+      if (confirm("Are you sure you want to delete this user?")) {
+        // Send an AJAX request to delete the user
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            // Reload the page after deleting the user
+            window.location.reload();
+          }
+        };
+        xhttp.open("POST", "deleteUser.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("username=" + username);
+      }
+    }
+
+  </script>
   <script src="../scripts.js"></script>
 </body>
-
 </html>

@@ -17,7 +17,7 @@ include '../database.php';
   <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" type="text/css"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="seemore.css">
+  <link rel="stylesheet" href="studentReport.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gate Entry System</title>
   <link rel="stylesheet" href="../styles.css">
@@ -30,57 +30,19 @@ include '../database.php';
       <h5>Gate Entry System</h5>
     </div>
     <ul class="nav-links">
-      <?php
-      // Check if the user is an admin
-      if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'hod') {
-        ?>
-        <li class="nav-link">
-          <a href="../dashboard/dashboard.php">
-            <i class="bx bx-home-alt icon"></i>
-            <span class="text nav-text">Dashboard</span>
-          </a>
-        </li>
-      <?php } ?>
       <li class="nav-link">
-        <a href="../Search/search.php">
-          <i class="bx bx-search icon"></i>
-          <span class="text nav-text">Search Student</span>
+        <a href="./studentProfile.php">
+          <i class="bx bx-user icon"></i>
+          <span class="text nav-text">Student Profile</span>
         </a>
       </li>
-      <?php
-      if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'hod') {
-        ?>
-        <li class="nav-link">
-          <a href="../addStudent/addStudent.php">
-            <i class="bx bx-user-plus icon"></i>
-            <span class="text nav-text">Add Student</span>
-          </a>
-        </li>
-      <?php } ?>
-      <?php
-      // Check if the user is an admin
-      if ($_SESSION['role'] == 'admin') {
-        ?>
-        <li class="nav-link">
-          <a href="../Analytics/analytics.php">
-            <i class="bx bx-bar-chart icon"></i>
-            <span class="text nav-text">Analytics</span>
-          </a>
-        </li>
-    
-        <li class="nav-link">
-          <a href="../Visitor/Visitor.php">
-            <i class='bx bx-group icon'></i>
-            <span class="text nav-text">Visitor Section</span>
-          </a>
-        </li>
-        <li class="nav-link">
-          <a href="../mail/mail.php">
-            <i class="bx bx-mail-send icon"></i>
-            <span class="text nav-text">Send Report</span>
-          </a>
-        </li>
-      <?php } ?>
+      
+      <li class="nav-link">
+        <a href="./studentReport.php">
+          <i class="bx bx-bar-chart icon"></i>
+          <span class="text nav-text">Student Report</span>
+        </a>
+      </li>
       <li class="log_out nav-link">
         <a href="../logout.php">
           <i class='bx bx-log-out bx-fade-left-hover'></i>
@@ -102,10 +64,27 @@ include '../database.php';
       <!-- Main Content Goes Here   -->
       <div class="main-content">
         <?php
-        if (isset($_GET['id'])) {
-          $id = $_GET['id'];
-          $fromDate = $_GET["fromDate"] ?? null;
-          $toDate = $_GET["toDate"] ?? null;
+        if (isset($_SESSION['username'])) {
+          $email = $_SESSION['username'];
+          // Prepare the SQL query
+          $sql = "SELECT id FROM student WHERE email = ?";
+
+          // Prepare and bind parameters
+          $stmt = $conn->prepare($sql);
+          $stmt->bind_param("s", $email);
+
+          // Execute the query
+          $stmt->execute();
+
+          // Bind the result variables
+          $stmt->bind_result($id);
+
+          // Fetch the result
+          $stmt->fetch();
+
+          // Close the statement
+          $stmt->close();
+
         }
         ?>
         <div class="heading">
@@ -113,42 +92,31 @@ include '../database.php';
             Student Report
           </h1>
         </div>
-        <div class="form-container">
-          <?php
-          $sql = "SELECT * from student where id='{$id}'";
-          $result = mysqli_query($conn, $sql);
-          while ($row = mysqli_fetch_assoc($result)) {
-            $student_id = $row['id'];
-            $photo = $row['photo_url'];
-            ?>
-            <form class="form">
-              <h2 class="form-heading">Student Details</h2>
-              <div>
-                <img class="table-image" src="<?php echo $photo; ?>" alt="Photo">
-              </div>
-              <div>
-                <div class="form-row">
-                  <label for="name">Name:</label>
-                  <p><?php echo strtoupper($row["name"]); ?></p>
-                </div>
-                <div class="form-row">
-                  <label for="dprt">Department:</label>
-                  <p><?php echo strtoupper($row['department']); ?></p>
-                </div>
-                <div class="form-row">
-                  <label for="year">Year:</label>
-                  <p><?php echo strtoupper($row['year']); ?></p>
-                </div>
-                <div class="form-row">
-                  <label for="num">Number:</label>
-                  <p><?php echo $row['conumber']; ?></p>
-                </div>
-              </div>
-            </form>
-          <?php } ?>
-        </div>
         <div class="table">
+          <form class="form" method="post">
+            <div class="form-row">
+              <label for="from">From:</label>
+              <input id="from" type="date" name="from">
+            </div>
+            <div class="form-row">
+              <label for="to">To:</label>
+              <input id="to" type="date" name="to">
+            </div>
+            <div class="form-row">
+              <input type="submit" class="btn" name="btn">
+            </div>
+          </form>
+          <?php
+          // Initialize $fromDate and $toDate
+          $fromDate = null;
+          $toDate = null;
+          if (isset($_POST["btn"])) {
+            $fromDate = $_POST['from'] ?? null;
+            $toDate = $_POST['to'] ?? null;
+          }
+          ?>
           <table>
+
             <thead>
               <tr>
                 <th>Sr.No</th>
@@ -184,12 +152,13 @@ include '../database.php';
                     <?php echo $i ?>
                   </td>
                   <td>
-                    <?php if($row["status"]=="Late"){
+                    <?php if ($row["status"] == "Late") {
                       echo "Late Entry";
-                    }elseif($row["status"]=="Early"){
+                    } elseif ($row["status"] == "Early") {
                       echo "Early Exit";
                     } else {
-                      echo $row["status"];} ?>
+                      echo $row["status"];
+                    } ?>
                   </td>
                   <td>
                     <?php echo $row["reason"] ?>
